@@ -1,0 +1,32 @@
+@import url('./__container/popup__container.css');
+@import url('./__close-button/popup__close-button.css');
+@import url('./__close-button/_type/popup__close-button_type_modal.css');
+@import url('./__close-button/_type/popup__close-button_type_photo.css');
+@import url('./__close-button/_type/popup__close-button_type_info-tool-tip.css');
+@import url('./__form/popup__form.css');
+@import url('./__photo-content/popup__photo-content.css');
+@import url('./__place-image/popup__place-image.css');
+@import url('./__place-name/popup__place-name.css');
+@import url('./__info-tool-tip/popup__info-tool-tip.css');
+
+.popup {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  position: fixed;
+  -webkit-transition: all 0.5s ease;
+  -o-transition: all 0.5s ease;
+  transition: all 0.5s ease;
+  opacity: 0;
+  visibility: hidden;
+}

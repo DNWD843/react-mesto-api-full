@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: controllers/cards.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: controllers/cards.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const Card = require('../models/card');
+
+/**
+ * @module
+ * @description Контроллеры модели card.&lt;br>
+ * Обрабатывают запросы:&lt;br>
+ *  - GET /cards - возвращает все карточки&lt;br>
+ *  - POST /cards - создаёт новую карточку&lt;br>
+ *  - DELETE /cards/:cardId - удаляет карточку по идентификатору&lt;br>
+ *  - PUT /cards/:cardId/likes — ставит лайк карточке&lt;br>
+ *  - DELETE /cards/:cardId/likes — удаляет лайк с карточки
+ * @since v.1.0.0
+ */
+
+/**
+ * @description Контроллер&lt;br>
+ * Получает данные всех карточек и отправляет их пользователю.&lt;br>
+ * Обрабатываeт запрос GET /cards
+ * @param {object} req - объект запроса
+ * @param {object} res - объект ответа
+ * @property {Method} Card.find - метод модели Card, ищет все карточки и возвращает их
+ *  пользователю
+ * @returns {JSON}
+ * @since v.1.0.0
+ * @instance
+ * @public
+ */
+const getCards = (req, res) => {
+  Card.find({})
+    .then((cards) => res.status(200).send(cards))
+    .catch(() => res.status(500).send({ message: 'Внутренняя ошибка сервера' }));
+};
+
+/**
+ * @description Контроллер&lt;br>
+ * Создаёт новую карточку и возвращает её пользователю.&lt;br>
+ * Обрабатываeт запрос POST /cards
+ * @param {object} req - объект запроса
+ * @param {object} res - объект ответа
+ * @property {String} req.body.name - название карточки из запроса
+ * @property {String} req.body.link - ссылка на изображение карточки из запроса
+ * @property {Method} Card.create - метод модели Card, создает карточку. Принимает аргументом объект
+ *  с данными для создания новой карточки
+ * @property {Object} newCardData - объект с данными для создания новой карточки
+ * @property {String} newCardData.name - название карточки
+ * @property {String} newCardData.link - ссылка на изображение карточки
+ * @property {String} newCardData.owner - идентификатор пользователя, создавшего карточку
+ * @returns {JSON}
+ * @instance
+ * @since v.1.1.0
+ * @public
+ */
+const createCard = (req, res) => {
+  const { name, link } = req.body;
+  // req.user._id - временное решение авторизции.
+  Card.create({ name, link, owner: req.user._id })
+    .then((card) => res.status(200).send(card))
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        return res.status(400).send({ message: 'Переданы некорректные данные' });
+      }
+      return res.status(500).send({ message: 'Внутренняя ошибка сервера' });
+    });
+};
+
+/**
+ * @description Контроллер&lt;br>
+ * Удаляет карточку по её идентификатору, возвращает сообщение об успешном удалении
+ *  и удаленную карточку.&lt;br> Обрабатываeт запрос DELETE /cards/:cardId
+ * @param {object} req - объект запроса
+ * @param {object} res - объект ответа
+ * @property {Method} Card.findByIdAndRemove - метод модели Card. Находит карточку по её
+ *  идентификатору и удаляет.  Принимает аргументом _id удаляемой карточки из параметров запроса
+ * @property {String} req.params.cardId - _id удаляемой карточки, передается в параметрах запроса
+ * @returns {JSON}
+ * @since v.1.1.0
+ * @instance
+ * @public
+ */
+const deleteCard = (req, res) => {
+  Card.findByIdAndRemove(req.params.cardId)
+    .then((deletedCard) => {
+      if (!deletedCard) {
+        return res.status(404).send({ message: 'Карточка не найдена' });
+      }
+      return res.status(200).send({ message: 'Карточка успешно удалена', deletedCard });
+    })
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        return res.status(400).send({ message: 'Переданы некорректные данные' });
+      }
+      return res.status(500).send({ message: 'Внутренняя ошибка сервера' });
+    });
+};
+
+/**
+ * @description Контроллер&lt;br>
+ * Добавляет "лайк" карточке, возвращает карточку с обновленным  массивом "лайков".&lt;br>
+ * Обрабатываeт запрос PUT /cards/:cardId/likes
+ * @param {Object} req - объект запроса
+ * @param {Object} res - объект ответа
+ * @property {Method} Card.findByIdAndUpdate - метод модели Card. Находит карточку по её
+ *  идентификатору и обновляет её свойства.  Принимает аргументами:&lt;br>
+ *  - _id обновляемой карточки из параметров запроса&lt;br>
+ *  - объект со свойствами, которые нужно обновить&lt;br>
+ *  - объект опций
+ * @property {String} req.params.cardId - _id обновляемой карточки, передается в параметрах запроса
+ * @property {Object} properties - объект со свойствами, которые нужно обновить
+ * @property {Method} properties.$addToSet - оператор БД MongoDB, добавляет элемент в массив, если
+ *  его там еще нет
+ * @property {Array}  properties.$addToSet.likes - массив "лайков" карточки
+ * @property {String} properties.$addToSet.likes.req.user._id - идентификатор пользователя,
+ *  "лайкнувшего" карточку
+ * @property {Object} options - объект опций метода Card.findByIdAndUpdate
+ * @property {Parameters} options.new - если true, метод возвращает обновленные данные.
+ *  По умолчанию false.
+ * @returns {JSON}
+ * @since v.1.1.0
+ * @instance
+ * @public
+ */
+const likeCard = (req, res) => {
+  Card.findByIdAndUpdate(
+    req.params.cardId,
+    // req.user._id - временное решение авторизции.
+    { $addToSet: { likes: req.user._id } },
+    { new: true },
+  )
+    .then((card) => {
+      if (!card) {
+        return res.status(404).send({ message: 'Карточки с таким id нет' });
+      }
+      return res.status(200).send(card);
+    })
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        return res.status(400).send({ message: 'Переданы некорректные данные' });
+      }
+      return res.status(500).send({ message: 'Внутренняя ошибка сервера' });
+    });
+};
+
+/**
+ *
+ * @description Контроллер&lt;br>
+ * Удаляет "лайк" у карточки, возвращает карточку с обновленным массивом "лайков".&lt;br>
+ * Обрабатываeт запрос DELETE /cards/:cardId/likes
+ * @param {Object} req - объект запроса
+ * @param {Object} res - объект ответа
+ * @property {Method} Card.findByIdAndUpdate - метод модели Card. Находит карточку по её
+ *  идентификатору и обновляет её свойства.  Принимает аргументами:&lt;br>
+ *  - _id обновляемой карточки из параметров запроса&lt;br>
+ *  - объект со свойствами, которые нужно обновить&lt;br>
+ *  - объект опций
+ * @property {String} req.params.cardId - _id обновляемой карточки, передается в параметрах запроса
+ * @property {Object} properties - объект со свойствами, которые нужно обновить
+ * @property {Method} properties.$pull - оператор БД MongoDB, удаляет элемент из массива
+ * @property {Array}  properties.$pull.likes - массив "лайков" карточки
+ * @property {String} properties.$pull.likes.req.user._id - идентификатор пользователя,
+ *  "лайкнувшего" карточку
+ * @property {Object} options - объект опций метода Card.findByIdAndUpdate
+ * @property {Parameters} options.new - если true, метод возвращает обновленные данные.
+ * @returns {JSON}
+ * @since v.1.1.0
+ * @instance
+ * @public
+ */
+const dislikeCard = (req, res) => {
+  Card.findByIdAndUpdate(
+    req.params.cardId,
+    // req.user._id - временное решение авторизции.
+    { $pull: { likes: req.user._id } },
+    { new: true },
+  )
+    .then((card) => {
+      if (!card) {
+        return res.status(404).send({ message: 'Карточки с таким id нет' });
+      }
+      return res.status(200).send(card);
+    })
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        return res.status(400).send({ message: 'Переданы некорректные данные' });
+      }
+      return res.status(500).send({ message: 'Внутренняя ошибка сервера' });
+    });
+};
+
+module.exports = {
+  getCards,
+  createCard,
+  deleteCard,
+  likeCard,
+  dislikeCard,
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-app.html">app</a></li><li><a href="module-controllers_cards.html">controllers/cards</a></li><li><a href="module-controllers_users.html">controllers/users</a></li><li><a href="module-models_card.html">models/card</a></li><li><a href="module-models_user.html">models/user</a></li><li><a href="module-routes_badRequest.html">routes/badRequest</a></li><li><a href="module-routes_cards.html">routes/cards</a></li><li><a href="module-routes_root.html">routes/root</a></li><li><a href="module-routes_users.html">routes/users</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Sun Nov 01 2020 02:18:18 GMT+0300 (Москва, стандартное время)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

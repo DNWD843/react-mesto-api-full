@@ -1,0 +1,13 @@
+.button_type_delete {
+  border-style: none;
+  background-color: rgba(0, 0, 0, 0);
+  background-image: url('./../../../images/trashIcon.svg');
+  background-size: cover;
+  -webkit-transition: opacity .15s linear;
+  -o-transition: opacity .15s linear;
+  transition: opacity .15s linear;
+}
+
+.button_type_delete:hover {
+  opacity: .6;
+}

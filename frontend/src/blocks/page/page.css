@@ -1,0 +1,22 @@
+@import url('./__container/page__container.css');
+@import url('./__header/page__header.css');
+@import url('./__content/page__content.css');
+@import url('./__overlay/page__overlay.css');
+@import url('./__start-page-container/page__start-page-container.css');
+@import url('./__overlay/_theme/page__overlay_theme_light.css');
+@import url('./__overlay/_theme/page__overlay_theme_dark.css');
+.page {
+  background-color: #000000;
+  font-family: 'Inter', Arial, Helvetica, sans-serif;
+  font-style: normal;
+  margin: 0;
+  /*   сглаживание шрифтов в Firefox и браузерах на движке Webkit (Яндекс.Браузер, Google Chrome, Opera, Safari)  */
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  /*  масштабирования шрифтов   */
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  /*  кернинг   */
+  text-rendering: optimizeLegibility;
+}

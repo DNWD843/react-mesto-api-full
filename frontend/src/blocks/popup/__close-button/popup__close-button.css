@@ -1,0 +1,11 @@
+.popup__close-button {
+  width: 41px;
+  height: 41px;
+  align-self: flex-end;
+}
+
+@media screen and (max-width: 720px) {
+  .popup__close-button {
+    background-size: cover;
+  }
+}

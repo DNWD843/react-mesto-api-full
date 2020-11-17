@@ -1,0 +1,11 @@
+.start-page-container__form {
+  width: 430px;
+  background: #000;
+  margin: 0 auto;
+}
+
+@media screen and (max-width: 720px) {
+  .start-page-container__form {
+    width: 300px;
+  }
+}

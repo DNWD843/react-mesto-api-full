@@ -1,0 +1,25 @@
+@import url('./__logo/header__logo.css');
+@import url('./__link/header__link.css');
+.header {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  border-bottom: 1px solid rgba(84, 84, 84, .7);
+  border-top: 1px solid rgba(84, 84, 84, .7);
+  display: flex;
+  justify-content: space-between;
+  padding: 45px 2px 38px 2px;
+}
+
+@media screen and (max-width: 960px) {
+  .header {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+}
+
+@media screen and (max-width: 425px) {
+  .header {
+    padding-top: 28px;
+    padding-bottom: 30px;
+  }
+}

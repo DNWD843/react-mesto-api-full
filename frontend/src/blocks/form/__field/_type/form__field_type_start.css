@@ -1,0 +1,9 @@
+.form__field_type_start {
+  margin-bottom: 25px;
+}
+
+@media screen and (max-width: 720px) {
+  .form__field_type_start {
+    margin-bottom: 29px;
+  }
+}

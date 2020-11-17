@@ -1,0 +1,17 @@
+.button_type_edit {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  background-repeat: no-repeat;
+  background-position: center;
+  border-style: none;
+  background-color: #000000;
+  background-image: url(./../../../images/vectorEdit.svg);
+  border: 1px solid #ffffff;
+  -webkit-transition: opacity .15s linear;
+  -o-transition: opacity .15s linear;
+  transition: opacity .15s linear;
+}
+
+.button_type_edit:hover {
+  opacity: .6;
+}

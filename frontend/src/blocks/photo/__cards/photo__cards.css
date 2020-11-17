@@ -1,0 +1,35 @@
+.photo__cards {
+  width: 100%;
+  max-width: 882px;
+  margin: 0;
+  list-style: none;
+  padding: 0;
+  display: -ms-grid;
+  display: grid;
+  grid-template-columns: repeat(3, 282px);
+  grid-template-rows: repeat(3, 360px);
+  grid-auto-rows: 360px;
+  column-gap: 18px;
+  row-gap: 21px;
+  color: #000000;
+}
+
+@media screen and (max-width:960px) {
+  .photo__cards {
+    grid-template-columns: repeat(2, 282px);
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+  }
+}
+
+@media screen and (max-width:619px) {
+  .photo__cards {
+    -ms-grid-columns: 282px;
+    grid-template-columns: 282px;
+    row-gap: 20px;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+  }
+}

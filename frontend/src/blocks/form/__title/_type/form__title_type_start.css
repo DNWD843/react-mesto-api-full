@@ -1,0 +1,12 @@
+.form__title_type_start {
+  color: #fff;
+  align-self: center;
+}
+
+@media screen and (max-width: 720px) {
+  .form__title_type_start {
+    font-size: 20px;
+    line-height: 24px;
+    margin-bottom: 38px;
+  }
+}

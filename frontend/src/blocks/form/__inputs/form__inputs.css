@@ -1,0 +1,12 @@
+.form__inputs {
+  margin: 0 0 23px 0;
+  width: 100%;
+  list-style: none;
+  padding: 0;
+}
+
+@media screen and (max-width: 720px) {
+  .form__inputs {
+    margin-bottom: 21px;
+  }
+}

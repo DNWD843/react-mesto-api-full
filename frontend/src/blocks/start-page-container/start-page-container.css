@@ -1,0 +1,6 @@
+@import url('./__form/start-page-container__form.css');
+
+.start-page-container {
+  margin: 0;
+  display: flex;
+}

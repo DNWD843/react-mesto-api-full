@@ -1,0 +1,13 @@
+ .form__redirect-link {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 16.94px;
+  opacity: 1;
+  transition: opacity .15s linear;
+}
+
+.form__redirect-link:hover {
+  opacity: 0.6;
+}

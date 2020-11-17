@@ -1,0 +1,16 @@
+.button_type_submit-start {
+  border-radius: 2px;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  background-repeat: no-repeat;
+  background-position: center;
+  border-style: none;
+  background-color: #fff;
+  text-align: center;
+  color: #000;
+  transition: background-color .15s linear;
+}
+
+.button_type_submit-start:hover {
+  background-color: rgba(255, 255, 255, 0.85);
+}

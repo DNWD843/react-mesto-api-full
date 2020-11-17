@@ -1,0 +1,9 @@
+.popup__close-button_type_modal {
+  transform: translate(37px, 2px);
+}
+
+@media screen and (max-width: 720px) {
+  .popup__close-button_type_modal {
+    transform: translate(33px, 7px);
+  }
+}

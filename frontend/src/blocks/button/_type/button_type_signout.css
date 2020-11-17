@@ -1,0 +1,12 @@
+.button_type_signout {
+  border-style: none;
+  background-color: #000000;
+  text-align: center;
+  color: #a9a9a9;
+  opacity: 1;
+  transition: opacity .15s linear;
+}
+
+.button_type_signout:hover {
+  opacity: 0.6;
+}

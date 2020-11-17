@@ -1,0 +1,19 @@
+@import url('./__image/info-tool-tip__image.css');
+@import url('./__image/_type/info-tool-tip__image_type_fail.css');
+@import url('./__image/_type/info-tool-tip__image_type_success.css');
+@import url('./__title/info-tool-tip__title.css');
+.info-tool-tip {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 60px 36px;
+  box-sizing: border-box;
+  background: white;
+}
+
+@media screen and (max-width: 720px) {
+  .info-tool-tip {
+    padding: 50px 18px;
+  }
+}

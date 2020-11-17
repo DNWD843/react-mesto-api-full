@@ -1,0 +1,24 @@
+.button_type_add {
+  border-radius: 2px;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  background-repeat: no-repeat;
+  background-position: center;
+  border-style: none;
+  border: 2px solid white;
+  background-image: url(./../../../images/vectorAdd.svg);
+  background-color: #000000;
+  -webkit-transition: opacity .15s linear;
+  -o-transition: opacity .15s linear;
+  transition: opacity .15s linear;
+}
+
+.button_type_add:hover {
+  opacity: .6;
+}
+
+@media screen and (max-width: 720px) {
+  .button_type_add {
+    background-image: url(./../../../images/vectorAddMobile.svg);
+  }
+}

@@ -1,0 +1,6 @@
+.navbar__menu-button_type_close {
+  background-image: url('../../../../images/menu-close-icon.svg');
+  width: 30px;
+  height: 30px;
+  background-size: 150%;
+}

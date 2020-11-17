@@ -1,0 +1,13 @@
+.user-profile__edit-button {
+  width: 24px;
+  height: 24px;
+  background-size: 50%;
+  margin: 19px 0 0 -1px;
+}
+
+@media screen and (max-width: 720px) {
+  .user-profile__edit-button {
+    width: 18px;
+    height: 18px;
+  }
+}

@@ -1,0 +1,9 @@
+.popup__close-button_type_info-tool-tip {
+  transform: translate(41px, 0px);
+ }
+
+ @media screen and (max-width: 720px) {
+   .popup__close-button_type_info-tool-tip {
+     transform: translate(-120px, -20px);
+   }
+ }

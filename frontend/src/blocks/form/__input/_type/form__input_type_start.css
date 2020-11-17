@@ -1,0 +1,12 @@
+.form__input_type_start {
+  border-bottom: 2px solid #CCC;
+  background-color: #000;
+  color: #ccc;
+}
+
+@media screen and (max-width: 425px) {
+  .form__input_type_start {
+    font-size: 14px;
+    line-height: 17px;
+  }
+}

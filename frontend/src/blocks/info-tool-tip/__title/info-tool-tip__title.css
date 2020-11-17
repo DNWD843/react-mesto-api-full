@@ -1,0 +1,15 @@
+.info-tool-tip__title {
+  font-weight: 900;
+  font-size: 24px;
+  line-height: 29px;
+  color: #000;
+  text-align: center;
+  margin: 0;
+}
+
+@media screen and (max-width: 720px) {
+  .info-tool-tip__title {
+    font-size: 20px;
+    line-height: 24px;
+  }
+}

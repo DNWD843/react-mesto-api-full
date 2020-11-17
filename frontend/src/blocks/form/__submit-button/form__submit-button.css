@@ -1,0 +1,15 @@
+.form__submit-button {
+  width: 100%;
+  font-size: 18px;
+  line-height: 22px;
+  padding: 14px 0;
+}
+
+@media screen and (max-width: 720px) {
+  .form__submit-button {
+    font-size: 14px;
+    line-height: 17px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+}

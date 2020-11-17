@@ -1,0 +1,26 @@
+@import url('./__avatar-button/user-profile__avatar-button.css');
+@import url('./__user-info/user-profile__user-info.css');
+@import url('./__user-name/user-profile__user-name.css');
+@import url('./__user-job/user-profile__user-job.css');
+@import url('./__edit-button/user-profile__edit-button.css');
+@import url('./__add-button/user-profile__add-button.css');
+.user-profile {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+@media screen and (max-width: 720px) {
+  .user-profile {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+  }
+}

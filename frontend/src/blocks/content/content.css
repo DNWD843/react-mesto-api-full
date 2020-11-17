@@ -1,0 +1,6 @@
+@import url('./__user-profile/content__user-profile.css');
+@import url('./__photo/content__photo.css');
+.content {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}

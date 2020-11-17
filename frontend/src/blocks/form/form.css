@@ -1,0 +1,39 @@
+@import url('./__title/form__title.css');
+@import url('./__title/_type/form__title_type_start.css');
+@import url('./__submit-button/form__submit-button.css');
+@import url('./__submit-button/_type/form__submit-button_type_start.css');
+@import url('./__inputs/form__inputs.css');
+@import url('./__inputs/_type/form__inputs_type_start.css');
+@import url('./__field/form__field.css');
+@import url('./__field/_type/form__field_type_start.css');
+@import url('./__input/form__input.css');
+@import url('./__input/_type/form__input_type_error.css');
+@import url('./__input/_type/form__input_type_start.css');
+@import url('./__input-error/form__input-error.css');
+@import url('./__input-error/_active/form__input-error_active.css');
+@import url('./__redirect-link/form__redirect-link.css');
+@import url('./__redirect-title/form__redirect-title.css');
+.form {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  padding: 34px 36px 36px;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+@media screen and (max-width: 720px) {
+  .form {
+    padding: 30px 20px 30px;
+  }
+}
