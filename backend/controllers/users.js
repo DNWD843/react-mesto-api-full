@@ -1,4 +1,5 @@
 const User = require('../models/user');
+const jwt = require('jsonwebtoken');
 
 /**
  * @module
@@ -29,7 +30,9 @@ const User = require('../models/user');
 const getUsers = (req, res) => {
   User.find({})
     .then((users) => res.status(200).send(users))
-    .catch(() => res.status(500).send({ message: 'Внутренняя ошибка сервера' }));
+    .catch(() =>
+      res.status(500).send({ message: 'Внутренняя ошибка сервера' })
+    );
 };
 
 /**
@@ -59,7 +62,9 @@ const getUserById = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        return res.status(400).send({ message: 'Переданы некорректные данные' });
+        return res
+          .status(400)
+          .send({ message: 'Переданы некорректные данные' });
       }
       return res.status(500).send({ message: 'Внутренняя ошибка сервера' });
     });
@@ -82,21 +87,27 @@ const getUserById = (req, res) => {
  * @property {String} newUserData.name - имя нового пользователя
  * @property {String} newUserData.about - информация о новом пользователе
  * @property {String} newUserData.avatar - ссылка на аватар нового пользователя
+ * @property {String} newUserDta.email - емэйл пользователя (логин)
+ * @property {String} newUserData.password - пароль
  * @returns {JSON}
  * @since v.1.1.0
  * @instance
  * @public
  */
 const createUser = (req, res) => {
-  const { name, about, avatar } = req.body;
-  User.create({ name, about, avatar })
-    .then((user) => res.status(200).send(user))
-    .catch((err) => {
-      if (err.name === 'ValidationError') {
-        return res.status(400).send({ message: 'Переданы некорректные данные' });
-      }
-      return res.status(500).send({ message: 'Внутренняя ошибка сервера' });
-    });
+  const { name, about, avatar, email, password } = req.body;
+  bcrypt.hash(password, 10).then((hash) =>
+    User.create({ name, about, avatar, email, password: hash })
+      .then((user) => res.status(200).send(user))
+      .catch((err) => {
+        if (err.name === 'ValidationError') {
+          return res
+            .status(400)
+            .send({ message: 'Переданы некорректные данные' });
+        }
+        return res.status(500).send({ message: 'Внутренняя ошибка сервера' });
+      })
+  );
 };
 
 /**
@@ -137,12 +148,14 @@ const editUserProfile = (req, res) => {
       new: true,
       runValidators: true,
       upsert: true,
-    },
+    }
   )
     .then((user) => res.status(200).send(user))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        return res.status(400).send({ message: 'Переданы некорректные данные' });
+        return res
+          .status(400)
+          .send({ message: 'Переданы некорректные данные' });
       }
       return res.status(500).send({ message: 'Внутренняя ошибка сервера' });
     });
@@ -185,14 +198,31 @@ const editUserAvatar = (req, res) => {
       new: true,
       runValidators: true,
       upsert: true,
-    },
+    }
   )
     .then((user) => res.status(200).send(user))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        return res.status(400).send({ message: 'Переданы некорректные данные' });
+        return res
+          .status(400)
+          .send({ message: 'Переданы некорректные данные' });
       }
       return res.status(500).send({ message: 'Внутренняя ошибка сервера' });
+    });
+};
+
+const login = (req, res) => {
+  const { email, password } = req.body;
+
+  return User.findUserByCredentials(email, password)
+    .then((user) => {
+      const token = jwt.sign({ _id: user._id });
+      res
+        .cookie('token', token, { maxAge: 3600000 * 24 * 7, httpOnly: true })
+        .end();
+    })
+    .catch((err) => {
+      res.status(401).send(err.message);
     });
 };
 
@@ -202,4 +232,5 @@ module.exports = {
   createUser,
   editUserProfile,
   editUserAvatar,
+  login,
 };
