@@ -240,9 +240,7 @@ const login = (req, res) => {
 };
 
 const getAuthorizedUser = (req, res) => {
-  const _id = req.user;
-
-  User.findOne({ _id })
+  User.findById(req.user._id)
     .then((user) => {
       return res
         .status(200)

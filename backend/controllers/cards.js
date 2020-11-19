@@ -28,7 +28,9 @@ const Card = require('../models/card');
 const getCards = (req, res) => {
   Card.find({})
     .then((cards) => res.status(200).send(cards))
-    .catch(() => res.status(500).send({ message: 'Внутренняя ошибка сервера' }));
+    .catch(() =>
+      res.status(500).send({ message: 'Внутренняя ошибка сервера' })
+    );
 };
 
 /**
@@ -57,7 +59,9 @@ const createCard = (req, res) => {
     .then((card) => res.status(200).send(card))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        return res.status(400).send({ message: 'Переданы некорректные данные' });
+        return res
+          .status(400)
+          .send({ message: 'Переданы некорректные данные' });
       }
       return res.status(500).send({ message: 'Внутренняя ошибка сервера' });
     });
@@ -77,6 +81,7 @@ const createCard = (req, res) => {
  * @instance
  * @public
  */
+/*
 const deleteCard = (req, res) => {
   Card.findByIdAndRemove(req.params.cardId)
     .then((deletedCard) => {
@@ -88,6 +93,30 @@ const deleteCard = (req, res) => {
     .catch((err) => {
       if (err.name === 'CastError') {
         return res.status(400).send({ message: 'Переданы некорректные данные' });
+      }
+      return res.status(500).send({ message: 'Внутренняя ошибка сервера' });
+    });
+}; */
+
+const deleteCard = (req, res) => {
+  Card.findById(req.params.cardId)
+    .then((card) => {
+      if (!card) {
+        return res.status(404).send({ message: 'Карточка не найдена' });
+      }
+      if (card.owner.toString() !== req.user._id.toString()) {
+        return res
+          .status(403)
+          .send({ message: 'Невозможно удалить чужую карточку' });
+      }
+      card.remove();
+      return res.status(200).send({ message: 'Карточка успешно удалена' });
+    })
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        return res
+          .status(400)
+          .send({ message: 'Переданы некорректные данные' });
       }
       return res.status(500).send({ message: 'Внутренняя ошибка сервера' });
     });
@@ -124,7 +153,7 @@ const likeCard = (req, res) => {
     req.params.cardId,
     // req.user._id - временное решение авторизции.
     { $addToSet: { likes: req.user._id } },
-    { new: true },
+    { new: true }
   )
     .then((card) => {
       if (!card) {
@@ -134,7 +163,9 @@ const likeCard = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        return res.status(400).send({ message: 'Переданы некорректные данные' });
+        return res
+          .status(400)
+          .send({ message: 'Переданы некорректные данные' });
       }
       return res.status(500).send({ message: 'Внутренняя ошибка сервера' });
     });
@@ -170,7 +201,7 @@ const dislikeCard = (req, res) => {
     req.params.cardId,
     // req.user._id - временное решение авторизции.
     { $pull: { likes: req.user._id } },
-    { new: true },
+    { new: true }
   )
     .then((card) => {
       if (!card) {
@@ -180,7 +211,9 @@ const dislikeCard = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        return res.status(400).send({ message: 'Переданы некорректные данные' });
+        return res
+          .status(400)
+          .send({ message: 'Переданы некорректные данные' });
       }
       return res.status(500).send({ message: 'Внутренняя ошибка сервера' });
     });

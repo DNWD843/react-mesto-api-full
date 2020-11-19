@@ -19,8 +19,8 @@ const {
 } = require('../controllers/users.js');
 
 router.get('/', getUsers);
-//router.get('/:userId', getUserById);
 router.get('/me', getAuthorizedUser);
+router.get('/:userId', getUserById);
 router.patch('/me', editUserProfile);
 router.patch('/me/avatar', editUserAvatar);
 
