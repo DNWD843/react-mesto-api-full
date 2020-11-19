@@ -1,5 +1,6 @@
 const User = require('../models/user');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 
 /**
  * @module
@@ -211,19 +212,45 @@ const editUserAvatar = (req, res) => {
     });
 };
 
+/**
+ * @description Контроллер<br>
+ * Проверяет учетные данные пользователя. Если пользователь найден в базе - отправляет его токен.
+ *  Принимает емэйл (логин) и пароль, возвращает токен.
+ * @param {Object} req - объект запроса
+ * @property {String} req.email - емэйл (логин)
+ * @property {String} req.password - пароль
+ * @param {Object} res - объект ответа
+ * @property {String} res.token - токен
+ * @returns {Object} token
+ * @since v.3.0.0
+ */
 const login = (req, res) => {
   const { email, password } = req.body;
 
   return User.findUserByCredentials(email, password)
     .then((user) => {
-      const token = jwt.sign({ _id: user._id });
-      res
+      const token = jwt.sign({ _id: user._id }, 'secret');
+      return res
         .cookie('token', token, { maxAge: 3600000 * 24 * 7, httpOnly: true })
         .end();
     })
     .catch((err) => {
-      res.status(401).send(err.message);
+      return res.status(401).send(err.message);
     });
+};
+
+const getAuthorizedUser = (req, res) => {
+  const _id = req.user;
+
+  User.findOne({ _id })
+    .then((user) => {
+      return res
+        .status(200)
+        .send({ data: { _id: user._id, email: user.email } });
+    })
+    .catch((err) =>
+      res.status(500).send({ message: 'Внутренняя ошибка сервера' })
+    );
 };
 
 module.exports = {
@@ -233,4 +260,5 @@ module.exports = {
   editUserProfile,
   editUserAvatar,
   login,
+  getAuthorizedUser,
 };
