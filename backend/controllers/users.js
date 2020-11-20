@@ -1,7 +1,9 @@
 const User = require('../models/user');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const { SALT_ROUND, JWT_SECRET, JWT_MAX_AGE } = require('../configs');
+const { SALT_ROUND, JWT_MAX_AGE } = require('../configs');
+
+const { NODE_ENV = 'develop', JWT_SECRET } = process.env;
 
 /**
  * @module
@@ -224,12 +226,15 @@ const editUserAvatar = (req, res) => {
  * @returns {Object} token
  * @since v.3.0.0
  */
+
 const login = (req, res) => {
   const { email, password } = req.body;
 
   return User.findUserByCredentials(email, password)
     .then((user) => {
-      const token = jwt.sign({ _id: user._id }, JWT_SECRET);
+      const secret = NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret';
+      const token = jwt.sign({ _id: user._id }, secret);
+
       return res
         .cookie('token', token, { maxAge: JWT_MAX_AGE, httpOnly: true })
         .end();
