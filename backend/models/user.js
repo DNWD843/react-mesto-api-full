@@ -10,7 +10,7 @@ const bcrypt = require('bcryptjs');
  * @param {Object} email - емэйл пользователя (логин)
  * @param {Object} password - пароль
  * @method findUserByCredentials  - метод поиска пользователя по его логину и паролю.
- * Принимает аргументами емэйл (логин) и пароль, возвращает объект пользователя или ошибку
+ * Принимает аргументами емэйл (логин) и пароль, возвращает объект пользователя
  * @since v.1.1.0
  */
 const userSchema = new mongoose.Schema({
@@ -54,21 +54,24 @@ const userSchema = new mongoose.Schema({
     type: String,
     minlength: 8,
     required: true,
+    select: false,
   },
 });
 
 userSchema.statics.findUserByCredentials = function (email, password) {
-  return this.findOne({ email }).then((user) => {
-    if (!user) {
-      return Promise.reject(new Error('Неправильные почта или пароль'));
-    }
-    return bcrypt.compare(password, user.password).then((matched) => {
-      if (!matched) {
-        return Promise.reject(newError('Неправильные почта или пароль'));
+  return this.findOne({ email })
+    .select('+password')
+    .then((user) => {
+      if (!user) {
+        return Promise.reject(new Error('Неправильные почта или пароль'));
       }
-      return user;
+      return bcrypt.compare(password, user.password).then((matched) => {
+        if (!matched) {
+          return Promise.reject(new Error('Неправильные почта или пароль'));
+        }
+        return user;
+      });
     });
-  });
 };
 
 module.exports = mongoose.model('user', userSchema);

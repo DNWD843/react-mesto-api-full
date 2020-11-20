@@ -1,6 +1,7 @@
 const User = require('../models/user');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const { SALT_ROUND, JWT_SECRET, JWT_MAX_AGE } = require('../configs');
 
 /**
  * @module
@@ -75,7 +76,7 @@ const getUserById = (req, res) => {
  * @description Контроллер<br>
  * Создает нового пользователя, в ответ отправляет данные созданного пользователя<br>
  * Принимает параметры из тела запроса: { name, about, avatar }<br>
- * Обрабатываeт запрос POST /users
+ * Обрабатываeт запрос POST /signup
  * @param {Object} req - объект запроса
  * @param {Object} res - объект ответа
  * @property {String} req.body.name - имя нового пользователя из тела запроса
@@ -97,7 +98,7 @@ const getUserById = (req, res) => {
  */
 const createUser = (req, res) => {
   const { name, about, avatar, email, password } = req.body;
-  bcrypt.hash(password, 10).then((hash) =>
+  bcrypt.hash(password, SALT_ROUND).then((hash) =>
     User.create({ name, about, avatar, email, password: hash })
       .then((user) => res.status(200).send(user))
       .catch((err) => {
@@ -142,7 +143,6 @@ const createUser = (req, res) => {
 const editUserProfile = (req, res) => {
   const { name, about } = req.body;
   User.findByIdAndUpdate(
-    // req.user._id - временное решение авторизции.
     req.user._id,
     { name, about },
     {
@@ -192,7 +192,6 @@ const editUserProfile = (req, res) => {
 const editUserAvatar = (req, res) => {
   const { avatar } = req.body;
   User.findByIdAndUpdate(
-    // req.user._id - временное решение авторизции.
     req.user._id,
     { avatar },
     {
@@ -215,7 +214,8 @@ const editUserAvatar = (req, res) => {
 /**
  * @description Контроллер<br>
  * Проверяет учетные данные пользователя. Если пользователь найден в базе - отправляет его токен.
- *  Принимает емэйл (логин) и пароль, возвращает токен.
+ *  Принимает емэйл (логин) и пароль, возвращает токен.<br>
+ * Обрабатывает запрос POST/signin
  * @param {Object} req - объект запроса
  * @property {String} req.email - емэйл (логин)
  * @property {String} req.password - пароль
@@ -229,9 +229,9 @@ const login = (req, res) => {
 
   return User.findUserByCredentials(email, password)
     .then((user) => {
-      const token = jwt.sign({ _id: user._id }, 'secret');
+      const token = jwt.sign({ _id: user._id }, JWT_SECRET);
       return res
-        .cookie('token', token, { maxAge: 3600000 * 24 * 7, httpOnly: true })
+        .cookie('token', token, { maxAge: JWT_MAX_AGE, httpOnly: true })
         .end();
     })
     .catch((err) => {
@@ -239,16 +239,34 @@ const login = (req, res) => {
     });
 };
 
+/**
+ * @description Контроллер<br>
+ * Получает и возвращает данные авторизованного пользователя.<br>
+ * Обрабатывает запрос GET /users/me
+ * @param {Object} req - объект запроса
+ * @property {String} req.user._id - id авторизованного пользователя
+ * @param {Object} res - объект ответа
+ * @returns {Object}
+ * @since v.3.0.0
+ */
 const getAuthorizedUser = (req, res) => {
   User.findById(req.user._id)
     .then((user) => {
+      if (!user) {
+        return res.status(404).send({ message: 'Нет пользователя с таким id' });
+      }
       return res
         .status(200)
         .send({ data: { _id: user._id, email: user.email } });
     })
-    .catch((err) =>
-      res.status(500).send({ message: 'Внутренняя ошибка сервера' })
-    );
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        return res
+          .status(400)
+          .send({ message: 'Переданы некорректные данные' });
+      }
+      return res.status(500).send({ message: 'Внутренняя ошибка сервера' });
+    });
 };
 
 module.exports = {

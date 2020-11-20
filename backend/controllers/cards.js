@@ -54,7 +54,6 @@ const getCards = (req, res) => {
  */
 const createCard = (req, res) => {
   const { name, link } = req.body;
-  // req.user._id - временное решение авторизции.
   Card.create({ name, link, owner: req.user._id })
     .then((card) => res.status(200).send(card))
     .catch((err) => {
@@ -81,23 +80,6 @@ const createCard = (req, res) => {
  * @instance
  * @public
  */
-/*
-const deleteCard = (req, res) => {
-  Card.findByIdAndRemove(req.params.cardId)
-    .then((deletedCard) => {
-      if (!deletedCard) {
-        return res.status(404).send({ message: 'Карточка не найдена' });
-      }
-      return res.status(200).send({ message: 'Карточка успешно удалена', deletedCard });
-    })
-    .catch((err) => {
-      if (err.name === 'CastError') {
-        return res.status(400).send({ message: 'Переданы некорректные данные' });
-      }
-      return res.status(500).send({ message: 'Внутренняя ошибка сервера' });
-    });
-}; */
-
 const deleteCard = (req, res) => {
   Card.findById(req.params.cardId)
     .then((card) => {
@@ -151,7 +133,6 @@ const deleteCard = (req, res) => {
 const likeCard = (req, res) => {
   Card.findByIdAndUpdate(
     req.params.cardId,
-    // req.user._id - временное решение авторизции.
     { $addToSet: { likes: req.user._id } },
     { new: true }
   )
@@ -199,7 +180,6 @@ const likeCard = (req, res) => {
 const dislikeCard = (req, res) => {
   Card.findByIdAndUpdate(
     req.params.cardId,
-    // req.user._id - временное решение авторизции.
     { $pull: { likes: req.user._id } },
     { new: true }
   )

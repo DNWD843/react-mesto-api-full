@@ -3,4 +3,5 @@ build
 dist
 .vscode
 docker
-!docker/.gitkeep
+!docker/.
+.env
