@@ -1,6 +1,6 @@
-import React from "react";
-import { CurrentUserContext } from "../contexts/CurrentUserContext";
-import Card from "./Card";
+import React from 'react';
+import { CurrentUserContext } from '../contexts/CurrentUserContext';
+import Card from './Card';
 import PropTypes from 'prop-types';
 
 /**
@@ -39,10 +39,7 @@ function Main({
 
   return (
     <main className="content page__content">
-      <section
-        className="user-profile content__user-profile"
-        key="user-profile"
-      >
+      <section className="user-profile content__user-profile" key="user-profile">
         <button
           type="button"
           onClick={onEditAvatar}

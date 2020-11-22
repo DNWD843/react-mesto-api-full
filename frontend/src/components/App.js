@@ -1,23 +1,23 @@
-import React from "react";
-import { Switch, Route, Redirect, withRouter } from "react-router-dom";
-import Header from "./Header";
-import Main from "./Main";
-import Footer from "./Footer";
-import ImagePopup from "./ImagePopup";
-import api from "../utils/api";
-import { CurrentUserContext } from "../contexts/CurrentUserContext";
-import EditProfilePopup from "./EditProfilePopup";
-import EditAvatarPopup from "./EditAvatarPopup";
-import AddPlacePopup from "./AddPlacePopup";
-import DeleteConfirmPopup from "./DeleteConfirmPopup";
-import InfoToolTip from "./InfoToolTip";
-import Login from "./Login";
-import Register from "./Register";
-import * as TO_ from "../utils/routesMap";
-import ProtectedRoute from "./ProtectedRoute";
-import { getToken, setToken, TOKEN_KEY } from "../utils/token";
-import * as auth from "../utils/auth";
-import NavBar from "./NavBar";
+import React from 'react';
+import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
+import Header from './Header';
+import Main from './Main';
+import Footer from './Footer';
+import ImagePopup from './ImagePopup';
+import api from '../utils/api';
+import { CurrentUserContext } from '../contexts/CurrentUserContext';
+import EditProfilePopup from './EditProfilePopup';
+import EditAvatarPopup from './EditAvatarPopup';
+import AddPlacePopup from './AddPlacePopup';
+import DeleteConfirmPopup from './DeleteConfirmPopup';
+import InfoToolTip from './InfoToolTip';
+import Login from './Login';
+import Register from './Register';
+import * as TO_ from '../utils/routesMap';
+import ProtectedRoute from './ProtectedRoute';
+import { getToken, setToken, TOKEN_KEY } from '../utils/token';
+import * as auth from '../utils/auth';
+import NavBar from './NavBar';
 
 /**
  * @description Классовый React-компонент<br>
@@ -73,8 +73,8 @@ class App extends React.Component {
       isLoading: false,
       loggedIn: false,
       userData: {
-        email: "",
-        password: "",
+        email: '',
+        password: '',
       },
       isInfoToolTipOpen: false,
       isMenuOpened: false,
@@ -91,7 +91,7 @@ class App extends React.Component {
    * @since v.2.0.0
    */
   closeAllPopups = () => {
-    document.removeEventListener("keydown", this.handleEscClose);
+    document.removeEventListener('keydown', this.handleEscClose);
     this.setState({
       isEditProfilePopupOpen: false,
       isAddPlacePopupOpen: false,
@@ -114,7 +114,7 @@ class App extends React.Component {
    * @since v.2.0.0
    */
   handleEscClose = (evt) => {
-    if (evt.key === "Escape") {
+    if (evt.key === 'Escape') {
       this.closeAllPopups();
     }
   };
@@ -156,9 +156,7 @@ class App extends React.Component {
    * @see {@link Card}
    */
   handleCardLike = (card) => {
-    const isLiked = card.likes.some(
-      (likeOwner) => likeOwner._id === this.state.currentUser._id
-    );
+    const isLiked = card.likes.some((likeOwner) => likeOwner._id === this.state.currentUser._id);
     api
       .changeLikeCardStatus(card.id, !isLiked)
       .then((newCard) => {
@@ -172,7 +170,7 @@ class App extends React.Component {
                 owner: newCard.owner,
                 likes: newCard.likes,
               }
-            : cardsItem
+            : cardsItem,
         );
         this.setState({ cards: newCards });
       })
@@ -193,7 +191,7 @@ class App extends React.Component {
    * @see {@link Card}
    */
   handleCardClick = (card) => {
-    document.addEventListener("keydown", this.handleEscClose);
+    document.addEventListener('keydown', this.handleEscClose);
     this.setState({ selectedCard: card });
     this.setState({ isImagePopupOpen: true });
   };
@@ -261,7 +259,7 @@ class App extends React.Component {
    */
   handleEditAvatarClick = () => {
     document.activeElement.blur();
-    document.addEventListener("keydown", this.handleEscClose);
+    document.addEventListener('keydown', this.handleEscClose);
     this.setState({ isEditAvatarPopupOpen: true });
   };
 
@@ -307,7 +305,7 @@ class App extends React.Component {
    */
   handleEditProfileClick = () => {
     document.activeElement.blur();
-    document.addEventListener("keydown", this.handleEscClose);
+    document.addEventListener('keydown', this.handleEscClose);
     this.setState({ isEditProfilePopupOpen: true });
   };
 
@@ -355,7 +353,7 @@ class App extends React.Component {
    */
   handleAddPlaceClick = () => {
     document.activeElement.blur();
-    document.addEventListener("keydown", this.handleEscClose);
+    document.addEventListener('keydown', this.handleEscClose);
     this.setState({ isAddPlacePopupOpen: true });
   };
 
@@ -418,7 +416,7 @@ class App extends React.Component {
     auth
       .register(password, email)
       .then((res) => {
-        if (res.data) {
+        if (res) {
           this.props.history.push(TO_.SIGNIN);
         } else {
           this.setState(
@@ -428,7 +426,7 @@ class App extends React.Component {
             },
             () => {
               console.log(res);
-            }
+            },
           );
         }
       })
@@ -458,31 +456,23 @@ class App extends React.Component {
       .then((res) => {
         if (res.token) {
           setToken(res.token);
-          this.setState(
-            {
-              loggedIn: true,
-              userData: {
-                email: login,
-                password,
-              },
-              isInfoToolTipOpen: true,
-            },
-            () => {
-              this.props.history.push(TO_.MAIN);
-            }
-          );
         } else {
-          this.setState(
-            {
-              loggedIn: false,
-              isInfoToolTipOpen: true,
-            },
-            () => {
-              console.log(res);
-            }
-          );
+          this.setState({
+            loggedIn: false,
+            isInfoToolTipOpen: true,
+          });
         }
       })
+      .then(() => {
+        this.tokenCheck();
+      })
+      .then(() => {
+        this.setState({
+          loggedIn: true,
+          isInfoToolTipOpen: true,
+        });
+      })
+      .then(() => this.props.history.push(TO_.MAIN))
       .catch((err) => console.log(err))
       .finally(() => this.setState({ isLoading: false }));
   };
@@ -501,33 +491,35 @@ class App extends React.Component {
    */
   tokenCheck = () => {
     const token = getToken();
+    console.log({ token });
     if (token) {
-      auth
-        .getContent(token)
-        .then((res) => {
-          if (res.data) {
-            this.setState(
-              {
-                loggedIn: true,
-                userData: { email: res.data.email },
-              },
-              () => {
-                this.props.history.push(TO_.MAIN);
-              }
-            );
-          } else {
-            this.setState(
-              {
-                loggedIn: false,
-                isInfoToolTipOpen: true,
-              },
-              () => {
-                console.log(res);
-              }
-            );
-          }
+      Promise.all([api.loadUserData(), api.loadCards()])
+        .then(([currentUserData, initialCardsData]) => {
+          this.setState({ currentUser: currentUserData });
+          const initialCards = initialCardsData.map((initialCard) => ({
+            id: initialCard._id,
+            link: initialCard.link,
+            title: initialCard.name,
+            likesQuantity: initialCard.likes.length,
+            owner: initialCard.owner,
+            likes: initialCard.likes,
+          }));
+          this.setState({ cards: initialCards });
         })
-        .catch((err) => console.log(err));
+        .then(() => {
+          this.setState(
+            {
+              loggedIn: true,
+              //currentUser: res,
+            },
+            () => {
+              this.props.history.push(TO_.MAIN);
+            },
+          );
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   };
 
@@ -543,7 +535,7 @@ class App extends React.Component {
    * @see {@link NavBar}
    */
   handleSignoutButtonClick = () => {
-    this.setState({ isMenuOpened: false });
+    this.setState({ isMenuOpened: false, loggedIn: false });
     localStorage.removeItem(TOKEN_KEY);
     this.props.history.push(TO_.SIGNIN);
   };
@@ -569,37 +561,59 @@ class App extends React.Component {
    */
   componentDidMount() {
     this.tokenCheck();
-    Promise.all([api.loadUserData(), api.loadCards()])
-      .then(([currentUserData, initialCardsData]) => {
-        this.setState({ currentUser: currentUserData });
-
-        /**
-         * @description массив объектов с деструктурированными данными карточек
-         * @param {Object} initialCardsData - массив объектов с данными карточек, полученный
-         * после успешного запроса на сервер
-         * @constant {Object} initialCards - новый массив объектов с данными карточек
-         * @property {String} initialCards.id - уникальный id карточки
-         * @property {String} initialCards.link - ссылка на изображение карточки
-         * @property {String} initialCards.title - название карточки
-         * @property {Number} initialCards.likesQuantity - число, количество лайков у карточки
-         * @property {Object} initialCards.owner - объект, данные о владельце карточки
-         * @property {Array} initialCards.likes - массив, содержит id всех пользователей, лайкнувших карточку
-         * @ignore
-         */
-        const initialCards = initialCardsData.map((initialCard) => ({
-          id: initialCard._id,
-          link: initialCard.link,
-          title: initialCard.name,
-          likesQuantity: initialCard.likes.length,
-          owner: initialCard.owner,
-          likes: initialCard.likes,
-        }));
-        this.setState({ cards: initialCards });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
   }
+  /*
+          Promise.all([api.loadUserData(), api.loadCards()])
+            .then(([currentUserData, initialCardsData]) => {
+              this.setState({ currentUser: currentUserData });
+
+         const initialCards = initialCardsData.map((initialCard) => ({
+            id: initialCard._id,
+            link: initialCard.link,
+            title: initialCard.name,
+            likesQuantity: initialCard.likes.length,
+            owner: initialCard.owner,
+            likes: initialCard.likes,
+          }));
+          this.setState({ cards: initialCards });
+        })
+        .catch((err) => {
+          console.log(err);
+            });
+        */
+  /*
+ Promise.all([api.loadUserData(), api.loadCards()])
+                .then(([currentUserData, initialCardsData]) => {
+                  this.setState({ currentUser: currentUserData });
+
+                  /**
+                   * @description массив объектов с деструктурированными данными карточек
+                   * @param {Object} initialCardsData - массив объектов с данными карточек, полученный
+                   * после успешного запроса на сервер
+                   * @constant {Object} initialCards - новый массив объектов с данными карточек
+                   * @property {String} initialCards.id - уникальный id карточки
+                   * @property {String} initialCards.link - ссылка на изображение карточки
+                   * @property {String} initialCards.title - название карточки
+                   * @property {Number} initialCards.likesQuantity - число, количество лайков у карточки
+                   * @property {Object} initialCards.owner - объект, данные о владельце карточки
+                   * @property {Array} initialCards.likes - массив, содержит id всех пользователей, лайкнувших карточку
+                   * @ignore
+                   */
+  /*    const initialCards = initialCardsData.map((initialCard) => ({
+                    id: initialCard._id,
+                    link: initialCard.link,
+                    title: initialCard.name,
+                    likesQuantity: initialCard.likes.length,
+                    owner: initialCard.owner,
+                    likes: initialCard.likes,
+                  }));
+                  this.setState({ cards: initialCards });
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
+
+  */
 
   /**
    * @method render
@@ -617,7 +631,7 @@ class App extends React.Component {
         <CurrentUserContext.Provider value={this.state.currentUser}>
           <NavBar
             handleSignoutButtonClick={this.handleSignoutButtonClick}
-            email={this.state.userData.email}
+            email={this.state.currentUser.email}
             handleMenuClick={this.handleMenuButtonClick}
             isMenuOpened={this.state.isMenuOpened}
             isDropdownMenu={true}
@@ -625,7 +639,7 @@ class App extends React.Component {
 
           <Header
             handleSignoutButtonClick={this.handleSignoutButtonClick}
-            email={this.state.userData.email}
+            email={this.state.currentUser.email}
             handleMenuClick={this.handleMenuButtonClick}
             isMenuOpened={this.state.isMenuOpened}
             isDropdownMenu={false}
@@ -647,26 +661,15 @@ class App extends React.Component {
             />
 
             <Route path={TO_.SIGNUP}>
-              <Register
-                isLoading={this.state.isLoading}
-                handleRegister={this.handleRegister}
-              />
+              <Register isLoading={this.state.isLoading} handleRegister={this.handleRegister} />
             </Route>
 
             <Route path={TO_.SIGNIN}>
-              <Login
-                isLoading={this.state.isLoading}
-                handleLogin={this.handleLogin}
-                userData={this.state.userData}
-              />
+              <Login isLoading={this.state.isLoading} handleLogin={this.handleLogin} />
             </Route>
 
             <Route path={TO_.MAIN}>
-              {!this.state.loggedIn ? (
-                <Redirect to={TO_.SIGNIN} />
-              ) : (
-                <Redirect to={TO_.MAIN} />
-              )}
+              {!this.state.loggedIn ? <Redirect to={TO_.SIGNIN} /> : <Redirect to={TO_.MAIN} />}
             </Route>
           </Switch>
 

@@ -1,3 +1,5 @@
+import { TOKEN_KEY } from '../utils/token';
+
 /**
  * @description  Класс Api <br>
  * Отвечает за отправку запросов на сервер и проверку полученных ответов
@@ -46,9 +48,11 @@ class Api {
    * @since v.1.0.0
    */
   loadUserData() {
+    console.log(`Bearer ${localStorage.getItem(TOKEN_KEY)}`);
+
     return fetch(this._userURL, {
       headers: {
-        authorization: this._token,
+        authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}`,
       },
     }).then((res) => {
       if (res.ok) {
@@ -66,9 +70,10 @@ class Api {
    * @since v.1.0.0
    */
   loadCards() {
+    console.log(`Bearer ${localStorage.getItem(TOKEN_KEY)}`);
     return fetch(this._cardsURL, {
       headers: {
-        authorization: this._token,
+        authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}`,
       },
     }).then((res) => {
       if (res.ok) {
@@ -93,10 +98,10 @@ class Api {
    */
   addNewCard(item) {
     return fetch(this._cardsURL, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        authorization: this._token,
-        "Content-Type": "application/json",
+        authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}`,
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         name: item.name,
@@ -120,10 +125,10 @@ class Api {
    * @since v.1.0.0
    */
   deleteCard(cardId) {
-    return fetch(`${this._cardsURL}${cardId}`, {
-      method: "DELETE",
+    return fetch(`${this._cardsURL}/${cardId}`, {
+      method: 'DELETE',
       headers: {
-        authorization: this._token,
+        authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}`,
       },
     }).then((res) => {
       if (res.ok) {
@@ -151,10 +156,10 @@ class Api {
    */
   editProfile({ name, about }) {
     return fetch(`${this._userURL}`, {
-      method: "PATCH",
+      method: 'PATCH',
       headers: {
-        authorization: this._token,
-        "Content-Type": "application/json",
+        authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}`,
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         name,
@@ -181,9 +186,9 @@ class Api {
    */
   changeLikeCardStatus(id, likeStatus) {
     return fetch(`${this._likesURL}${id}`, {
-      method: `${likeStatus ? "PUT" : "DELETE"}`,
+      method: `${likeStatus ? 'PUT' : 'DELETE'}`,
       headers: {
-        authorization: this._token,
+        authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}`,
       },
     }).then((res) => {
       if (res.ok) {
@@ -204,10 +209,10 @@ class Api {
    */
   editAvatar(avatar) {
     return fetch(`${this._avatarURL}`, {
-      method: "PATCH",
+      method: 'PATCH',
       headers: {
-        authorization: this._token,
-        "Content-Type": "application/json",
+        authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}`,
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         avatar: avatar,
@@ -231,16 +236,15 @@ class Api {
  */
 const api = new Api({
   URLs: {
-    baseURL: "https://mesto.nomoreparties.co/v1/cohort-14/",
-    cardsURL: "https://mesto.nomoreparties.co/v1/cohort-14/cards/",
-    userURL: "https://mesto.nomoreparties.co/v1/cohort-14/users/me/",
-    likesURL: "https://mesto.nomoreparties.co/v1/cohort-14/cards/likes/",
-    avatarURL: "https://mesto.nomoreparties.co/v1/cohort-14/users/me/avatar/",
+    baseURL: 'http://localhost:3000',
+    cardsURL: 'http://localhost:3000/cards',
+    userURL: 'http://localhost:3000/users/me',
+    likesURL: 'http://localhost:3000/cards/likes/',
+    avatarURL: 'http://localhost:3000/users/me/avatar',
   },
   headers: {
-    authorization: "85abb6e6-ccb0-45c7-b6e8-4ffe1f5da546",
+    authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}`,
   },
-  token: "85abb6e6-ccb0-45c7-b6e8-4ffe1f5da546",
 });
 
 export default api;

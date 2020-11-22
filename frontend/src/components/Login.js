@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
-import { useFormWithValidation } from "../hooks/useFormWithValidation";
-import StartPageWithForm from "./StartPageWithForm";
-import PropTypes from "prop-types";
+import React, { useEffect } from 'react';
+import { useFormWithValidation } from '../hooks/useFormWithValidation';
+import StartPageWithForm from './StartPageWithForm';
+import PropTypes from 'prop-types';
 
 /**
  * @module Login
@@ -22,14 +22,8 @@ import PropTypes from "prop-types";
  * @returns {JSX} - JSX-фрагмент разметки, форма авторизации в приложении
  * @since v.2.1.0
  */
-function Login({ isLoading, handleLogin, userData }) {
-  const {
-    values,
-    errors,
-    isValid,
-    handleInputChange,
-    resetForm,
-  } = useFormWithValidation();
+function Login({ isLoading, handleLogin }) {
+  const { values, errors, isValid, handleInputChange, resetForm } = useFormWithValidation();
 
   const { login, password } = values;
 
@@ -53,13 +47,7 @@ function Login({ isLoading, handleLogin, userData }) {
    * @ignore
    */
   useEffect(() => {
-    resetForm(
-      {
-        login: userData.email,
-        password: userData.password,
-      },
-      {}
-    );
+    resetForm();
     //eslint-disable-next-line
   }, []);
 
@@ -82,13 +70,13 @@ function Login({ isLoading, handleLogin, userData }) {
               type="email"
               onChange={handleInputChange}
               onFocus={handleInputChange}
-              value={login || ""}
+              value={login || ''}
               className="form__input form__input_type_start form__input_type_user-login"
               placeholder="Email"
               required
             />
             <span className="form__input-error" id="user-login-input-error">
-              {errors.login || ""}
+              {errors.login || ''}
             </span>
           </li>
           <li className="form__field">
@@ -98,7 +86,7 @@ function Login({ isLoading, handleLogin, userData }) {
               type="password"
               onChange={handleInputChange}
               onFocus={handleInputChange}
-              value={password || ""}
+              value={password || ''}
               className="form__input form__input_type_start form__input_type_user-password"
               placeholder="Пароль"
               required
@@ -106,7 +94,7 @@ function Login({ isLoading, handleLogin, userData }) {
               maxLength="35"
             />
             <span className="form__input-error" id="user-password-input-error">
-              {errors.password || ""}
+              {errors.password || ''}
             </span>
           </li>
         </ul>
@@ -118,7 +106,7 @@ function Login({ isLoading, handleLogin, userData }) {
 Login.propTypes = {
   isLoading: PropTypes.bool,
   handleLogin: PropTypes.func.isRequired,
-  userData: PropTypes.object.isRequired,
+  //userData: PropTypes.object.isRequired,
 };
 
 export default Login;

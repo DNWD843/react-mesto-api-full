@@ -1,6 +1,7 @@
-import * as PATH_TO_ from "./endpoints";
+import * as PATH_TO_ from './endpoints';
 
-const BASE_URL = "https://auth.nomoreparties.co";
+//const BASE_URL = "https://auth.nomoreparties.co";
+const BASE_URL = 'http://localhost:3000';
 
 /**
  * @module auth
@@ -21,9 +22,9 @@ const BASE_URL = "https://auth.nomoreparties.co";
  */
 export const register = (password, email) => {
   return fetch(`${BASE_URL}${PATH_TO_.REGISTER}`, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({ password, email }),
   })
@@ -42,9 +43,9 @@ export const register = (password, email) => {
  */
 export const authorize = (password, email) => {
   return fetch(`${BASE_URL}${PATH_TO_.LOGIN}`, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({ password, email }),
   })
@@ -62,10 +63,10 @@ export const authorize = (password, email) => {
  */
 export const getContent = (token) => {
   return fetch(`${BASE_URL}${PATH_TO_.USER}`, {
-    method: "GET",
+    method: 'GET',
     headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+      authorization: `Bearer ${token}`,
     },
   })
     .then((res) => res.json())

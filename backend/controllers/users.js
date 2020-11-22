@@ -102,7 +102,9 @@ const createUser = (req, res) => {
   const { name, about, avatar, email, password } = req.body;
   bcrypt.hash(password, SALT_ROUND).then((hash) =>
     User.create({ name, about, avatar, email, password: hash })
-      .then((user) => res.status(200).send(user))
+      .then((user) =>
+        res.status(200).send({ _id: user._id, email: user.email })
+      )
       .catch((err) => {
         if (err.name === 'ValidationError') {
           return res
@@ -233,11 +235,11 @@ const login = (req, res) => {
   return User.findUserByCredentials(email, password)
     .then((user) => {
       const secret = NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret';
-      const token = jwt.sign({ _id: user._id }, secret);
+      const token = jwt.sign({ _id: user._id }, secret, {
+        expiresIn: JWT_MAX_AGE,
+      });
 
-      return res
-        .cookie('token', token, { maxAge: JWT_MAX_AGE, httpOnly: true })
-        .end();
+      return res.status(200).send({ token });
     })
     .catch((err) => {
       return res.status(401).send(err.message);
@@ -260,9 +262,7 @@ const getAuthorizedUser = (req, res) => {
       if (!user) {
         return res.status(404).send({ message: 'Нет пользователя с таким id' });
       }
-      return res
-        .status(200)
-        .send({ data: { _id: user._id, email: user.email } });
+      return res.status(200).send(user); // { _id: user._id, email: user.email }
     })
     .catch((err) => {
       if (err.name === 'CastError') {
