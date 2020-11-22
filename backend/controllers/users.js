@@ -234,12 +234,21 @@ const login = (req, res) => {
 
   return User.findUserByCredentials(email, password)
     .then((user) => {
+      console.log('USER OK');
       const secret = NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret';
-      const token = jwt.sign({ _id: user._id }, secret, {
-        expiresIn: JWT_MAX_AGE,
-      });
+      /*    const token = jwt.sign({ _id: user._id }, secret, {
+            expiresIn: JWT_MAX_AGE,
+          });     */
+      const token = jwt.sign({ _id: user._id }, secret);
 
-      return res.status(200).send({ token });
+      //return res.status(200).send({ token });
+      return res
+        .cookie('token', token, {
+          maxAge: JWT_MAX_AGE,
+          httpOnly: true,
+          sameSite: true,
+        })
+        .end();
     })
     .catch((err) => {
       return res.status(401).send(err.message);

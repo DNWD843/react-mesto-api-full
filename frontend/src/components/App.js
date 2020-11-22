@@ -453,10 +453,8 @@ class App extends React.Component {
     this.setState({ isLoading: true });
     auth
       .authorize(password, login)
-      .then((res) => {
-        if (res.token) {
-          setToken(res.token);
-        } else {
+      .then((ok) => {
+        if (!ok) {
           this.setState({
             loggedIn: false,
             isInfoToolTipOpen: true,
@@ -464,7 +462,7 @@ class App extends React.Component {
         }
       })
       .then(() => {
-        this.tokenCheck();
+        this.getContentWithCookie();
       })
       .then(() => {
         this.setState({
@@ -489,38 +487,33 @@ class App extends React.Component {
    * @since v.2.1.0
    * @see {@link App}
    */
-  tokenCheck = () => {
-    const token = getToken();
-    console.log({ token });
-    if (token) {
-      Promise.all([api.loadUserData(), api.loadCards()])
-        .then(([currentUserData, initialCardsData]) => {
-          this.setState({ currentUser: currentUserData });
-          const initialCards = initialCardsData.map((initialCard) => ({
-            id: initialCard._id,
-            link: initialCard.link,
-            title: initialCard.name,
-            likesQuantity: initialCard.likes.length,
-            owner: initialCard.owner,
-            likes: initialCard.likes,
-          }));
-          this.setState({ cards: initialCards });
-        })
-        .then(() => {
-          this.setState(
-            {
-              loggedIn: true,
-              //currentUser: res,
-            },
-            () => {
-              this.props.history.push(TO_.MAIN);
-            },
-          );
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
+  getContentWithCookie = () => {
+    Promise.all([api.loadUserData(), api.loadCards()])
+      .then(([currentUserData, initialCardsData]) => {
+        this.setState({ currentUser: currentUserData });
+        const initialCards = initialCardsData.map((initialCard) => ({
+          id: initialCard._id,
+          link: initialCard.link,
+          title: initialCard.name,
+          likesQuantity: initialCard.likes.length,
+          owner: initialCard.owner,
+          likes: initialCard.likes,
+        }));
+        this.setState({ cards: initialCards });
+      })
+      .then(() => {
+        this.setState(
+          {
+            loggedIn: true,
+          },
+          () => {
+            this.props.history.push(TO_.MAIN);
+          },
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   /**
@@ -560,7 +553,8 @@ class App extends React.Component {
    * @ignore
    */
   componentDidMount() {
-    this.tokenCheck();
+    this.getContentWithCookie();
+    console.log('Hello, we are working with cookies!');
   }
   /*
           Promise.all([api.loadUserData(), api.loadCards()])

@@ -49,7 +49,7 @@ export const authorize = (password, email) => {
     },
     body: JSON.stringify({ password, email }),
   })
-    .then((res) => res.json())
+    .then((res) => res.ok) //res.json()
     .catch((err) => console.log(err));
 };
 
