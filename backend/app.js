@@ -5,6 +5,7 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const rootRouter = require('./routes/root');
+const handleErrors = require('./middlewares/handleErrors');
 
 const { PORT = 3000 } = process.env;
 
@@ -20,6 +21,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(rootRouter);
+app.use(handleErrors);
 
 mongoose
   .connect('mongodb://localhost:27017/mestodb', {

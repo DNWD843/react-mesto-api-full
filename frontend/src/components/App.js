@@ -15,7 +15,7 @@ import Login from './Login';
 import Register from './Register';
 import * as TO_ from '../utils/routesMap';
 import ProtectedRoute from './ProtectedRoute';
-import { getToken, setToken, TOKEN_KEY } from '../utils/token';
+import { TOKEN_KEY } from '../utils/token';
 import * as auth from '../utils/auth';
 import NavBar from './NavBar';
 
@@ -459,6 +459,7 @@ class App extends React.Component {
             loggedIn: false,
             isInfoToolTipOpen: true,
           });
+          return;
         }
       })
       .then(() => {
