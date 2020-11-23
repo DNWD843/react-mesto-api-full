@@ -10,13 +10,17 @@ const createUserReqValidator = celebrate({
     email: Joi.string().email().required(),
     password: Joi.string().alphanum().required().min(8),
   }),
-  cookies: 'token',
 });
 
 const editProfileReqValidator = celebrate({
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30).required(),
     about: Joi.string().min(2).max(30).required(),
+  }),
+  cookies: Joi.object().keys({
+    token: Joi.string()
+      .pattern(/^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$/)
+      .required(),
   }),
 });
 
@@ -26,7 +30,11 @@ const editAvatarReqValidator = celebrate({
       .pattern(/[-a-zA-Z0-9@:%_\+.~#?&\/=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&\/=]*)?/i)
       .required(),
   }),
-  cookies: 'token',
+  cookies: Joi.object().keys({
+    token: Joi.string()
+      .pattern(/^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$/)
+      .required(),
+  }),
 });
 
 const loginReqValidator = celebrate({
@@ -36,9 +44,18 @@ const loginReqValidator = celebrate({
   }),
 });
 
+const getUserDataReqValidator = celebrate({
+  cookies: Joi.object().keys({
+    token: Joi.string()
+      .pattern(/^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$/)
+      .required(),
+  }),
+});
+
 module.exports = {
   createUserReqValidator,
   editAvatarReqValidator,
   editProfileReqValidator,
   loginReqValidator,
+  getUserDataReqValidator,
 };

@@ -12,10 +12,6 @@ const auth = (req, res, next) => {
     next(error);
     return;
   }
-  /*
-  if (!token) {
-    return res.status(401).send({ message: 'Необходима авторизация2' });
-  }  */
 
   let payload;
   try {

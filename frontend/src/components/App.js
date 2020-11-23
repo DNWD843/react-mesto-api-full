@@ -454,22 +454,25 @@ class App extends React.Component {
     auth
       .authorize(password, login)
       .then((ok) => {
+        console.log({ ok });
         if (!ok) {
           this.setState({
             loggedIn: false,
             isInfoToolTipOpen: true,
           });
-          return;
+        } else {
+          this.setState(
+            {
+              loggedIn: true,
+              isInfoToolTipOpen: true,
+            },
+            () => {
+              this.getContentWithCookie();
+              this.props.history.push(TO_.MAIN);
+            },
+          );
         }
-        this.getContentWithCookie();
       })
-      .then(() => {
-        this.setState({
-          loggedIn: true,
-          isInfoToolTipOpen: true,
-        });
-      })
-      .then(() => this.props.history.push(TO_.MAIN))
       .catch((err) => console.log(err))
       .finally(() => this.setState({ isLoading: false }));
   };

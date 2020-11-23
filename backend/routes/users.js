@@ -21,10 +21,11 @@ const {
 const {
   editAvatarReqValidator,
   editProfileReqValidator,
+  getUserDataReqValidator,
 } = require('../middlewares/usersValidators');
 
 //router.get('/', getUsers);
-router.get('/me', getAuthorizedUser);
+router.get('/me', getUserDataReqValidator, getAuthorizedUser);
 //router.get('/:userId', getUserById);
 router.patch('/me', editProfileReqValidator, editUserProfile);
 router.patch('/me/avatar', editAvatarReqValidator, editUserAvatar);

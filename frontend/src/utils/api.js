@@ -48,8 +48,6 @@ class Api {
    * @since v.1.0.0
    */
   loadUserData() {
-    console.log(`Bearer ${localStorage.getItem(TOKEN_KEY)}`);
-
     return fetch(this._userURL, {
       headers: {
         authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}`,
@@ -70,7 +68,6 @@ class Api {
    * @since v.1.0.0
    */
   loadCards() {
-    console.log(`Bearer ${localStorage.getItem(TOKEN_KEY)}`);
     return fetch(this._cardsURL, {
       headers: {
         authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}`,

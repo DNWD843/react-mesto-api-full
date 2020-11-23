@@ -19,13 +19,14 @@ const {
 } = require('../controllers/cards.js');
 
 const {
+  getCardsReqValidator,
   createCardReqValidator,
   deleteCardReqValidator,
   likeCardReqValidator,
   dislikeCardReqValidator,
 } = require('../middlewares/cardsValidators');
 
-router.get('/', getCards);
+router.get('/', getCardsReqValidator, getCards);
 router.post('/', createCardReqValidator, createCard);
 router.delete('/:cardId', deleteCardReqValidator, deleteCard);
 router.put('/likes/:cardId', likeCardReqValidator, likeCard);
