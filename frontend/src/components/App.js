@@ -461,8 +461,6 @@ class App extends React.Component {
           });
           return;
         }
-      })
-      .then(() => {
         this.getContentWithCookie();
       })
       .then(() => {

@@ -8,8 +8,8 @@
  *  - DELETE /cards/:cardId/likes — удаляет лайк с карточки
  * @since v.1.0.0
  */
-
 const router = require('express').Router();
+const { celebrate, Joi } = require('celebrate');
 const {
   getCards,
   createCard,
@@ -18,10 +18,17 @@ const {
   dislikeCard,
 } = require('../controllers/cards.js');
 
+const {
+  createCardReqValidator,
+  deleteCardReqValidator,
+  likeCardReqValidator,
+  dislikeCardReqValidator,
+} = require('../middlewares/cardsValidators');
+
 router.get('/', getCards);
-router.post('/', createCard);
-router.delete('/:cardId', deleteCard);
-router.put('/likes/:cardId', likeCard);
-router.delete('/likes/:cardId', dislikeCard);
+router.post('/', createCardReqValidator, createCard);
+router.delete('/:cardId', deleteCardReqValidator, deleteCard);
+router.put('/likes/:cardId', likeCardReqValidator, likeCard);
+router.delete('/likes/:cardId', dislikeCardReqValidator, dislikeCard);
 
 module.exports = router;

@@ -18,10 +18,15 @@ const {
   getAuthorizedUser,
 } = require('../controllers/users.js');
 
-router.get('/', getUsers);
+const {
+  editAvatarReqValidator,
+  editProfileReqValidator,
+} = require('../middlewares/usersValidators');
+
+//router.get('/', getUsers);
 router.get('/me', getAuthorizedUser);
-router.get('/:userId', getUserById);
-router.patch('/me', editUserProfile);
-router.patch('/me/avatar', editUserAvatar);
+//router.get('/:userId', getUserById);
+router.patch('/me', editProfileReqValidator, editUserProfile);
+router.patch('/me/avatar', editAvatarReqValidator, editUserAvatar);
 
 module.exports = router;

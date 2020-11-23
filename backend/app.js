@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const path = require('path');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+const { errors } = require('celebrate');
 const rootRouter = require('./routes/root');
 const handleErrors = require('./middlewares/handleErrors');
 
@@ -21,6 +22,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(rootRouter);
+app.use(errors());
 app.use(handleErrors);
 
 mongoose

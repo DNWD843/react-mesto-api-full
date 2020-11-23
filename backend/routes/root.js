@@ -10,9 +10,10 @@ const cardsRoutes = require('./cards.js');
 const badRequestRouter = require('./badRequest.js');
 const { login, createUser } = require('../controllers/users.js');
 const { auth } = require('../middlewares/auth.js');
+const { createUserReqValidator, loginReqValidator } = require('../middlewares/usersValidators');
 
-router.post('/signup', createUser);
-router.post('/signin', login);
+router.post('/signup', createUserReqValidator, createUser);
+router.post('/signin', loginReqValidator, login);
 router.use(auth);
 router.use('/users', usersRoutes);
 router.use('/cards', cardsRoutes);
