@@ -28,7 +28,12 @@ export const register = (password, email) => {
     },
     body: JSON.stringify({ password, email }),
   })
-    .then((res) => res.json())
+    .then((res) => {
+      if (res.ok) {
+        return res.json();
+      }
+      return Promise.reject(`Ошибка: ${res.status}: ${res.statusText}`);
+    })
     .catch((err) => console.log(err));
 };
 
@@ -49,7 +54,12 @@ export const authorize = (password, email) => {
     },
     body: JSON.stringify({ password, email }),
   })
-    .then((res) => res.ok) //res.json()
+    .then((res) => {
+      if (res.ok) {
+        return res.json();
+      }
+      return Promise.reject(`Ошибка: ${res.status}: ${res.statusText}`);
+    })
     .catch((err) => console.log(err));
 };
 
@@ -69,6 +79,11 @@ export const getContent = (token) => {
       authorization: `Bearer ${token}`,
     },
   })
-    .then((res) => res.json())
+    .then((res) => {
+      if (res.ok) {
+        return res.json();
+      }
+      return Promise.reject(`Ошибка: ${res.status}: ${res.statusText}`);
+    })
     .catch((err) => console.log(err));
 };

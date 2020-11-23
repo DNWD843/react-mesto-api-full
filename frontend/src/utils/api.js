@@ -1,4 +1,4 @@
-import { TOKEN_KEY } from '../utils/token';
+import { getToken } from '../utils/token';
 
 /**
  * @description  Класс Api <br>
@@ -50,7 +50,9 @@ class Api {
   loadUserData() {
     return fetch(this._userURL, {
       headers: {
-        authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}`,
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${getToken()}`,
+        'Content-Security-Policy': 'default-src self; img-src *; script-src self; style-src self',
       },
     }).then((res) => {
       if (res.ok) {
@@ -70,7 +72,9 @@ class Api {
   loadCards() {
     return fetch(this._cardsURL, {
       headers: {
-        authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}`,
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${getToken()}`,
+        'Content-Security-Policy': 'default-src self; img-src *; script-src self; style-src self',
       },
     }).then((res) => {
       if (res.ok) {
@@ -97,7 +101,7 @@ class Api {
     return fetch(this._cardsURL, {
       method: 'POST',
       headers: {
-        authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}`,
+        authorization: `Bearer ${getToken()}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
@@ -125,7 +129,7 @@ class Api {
     return fetch(`${this._cardsURL}/${cardId}`, {
       method: 'DELETE',
       headers: {
-        authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}`,
+        authorization: `Bearer ${getToken()}`,
       },
     }).then((res) => {
       if (res.ok) {
@@ -155,7 +159,7 @@ class Api {
     return fetch(`${this._userURL}`, {
       method: 'PATCH',
       headers: {
-        authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}`,
+        authorization: `Bearer ${getToken()}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
@@ -185,7 +189,7 @@ class Api {
     return fetch(`${this._likesURL}${id}`, {
       method: `${likeStatus ? 'PUT' : 'DELETE'}`,
       headers: {
-        authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}`,
+        authorization: `Bearer ${getToken()}`,
       },
     }).then((res) => {
       if (res.ok) {
@@ -208,7 +212,7 @@ class Api {
     return fetch(`${this._avatarURL}`, {
       method: 'PATCH',
       headers: {
-        authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}`,
+        authorization: `Bearer ${getToken()}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
@@ -239,9 +243,12 @@ const api = new Api({
     likesURL: 'http://localhost:3000/cards/likes/',
     avatarURL: 'http://localhost:3000/users/me/avatar',
   },
-  headers: {
-    authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}`,
-  },
+  //headers: {
+  //authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}`,
+  //'Content-Security-Policy': 'default-src self; img-src *; script-src self; style-src self',
+  //Origin: 'http://localhost:3000',
+  //Credentials: 'include',
+  //},
 });
 
 export default api;

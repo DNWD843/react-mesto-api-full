@@ -4,7 +4,6 @@ const bcrypt = require('bcryptjs');
 const { SALT_ROUND, JWT_MAX_AGE } = require('../configs');
 const BadRequestError = require('../errors/bad-request-error');
 const NotFoundError = require('../errors/not-found-error');
-const UnauthorizedError = require('../errors/unauthorized-error');
 
 const { NODE_ENV = 'develop', JWT_SECRET } = process.env;
 
@@ -241,22 +240,15 @@ const editUserAvatar = (req, res, next) => {
 
 const login = (req, res, next) => {
   const { email, password } = req.body;
-
   return User.findUserByCredentials(email, password)
     .then((user) => {
       const secret = NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret';
-      const token = jwt.sign({ _id: user._id }, secret);
+      const token = jwt.sign({ _id: user._id }, secret, { expiresIn: JWT_MAX_AGE });
 
-      return res
-        .cookie('token', token, {
-          maxAge: JWT_MAX_AGE,
-          httpOnly: true,
-          sameSite: true,
-        })
-        .end();
+      return res.status(200).send({ token });
     })
     .catch((err) => {
-      const error = new UnauthorizedError(err.message);
+      const error = new BadRequestError(err.message);
       next(error);
     });
 };

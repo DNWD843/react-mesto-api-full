@@ -15,7 +15,7 @@ import Login from './Login';
 import Register from './Register';
 import * as TO_ from '../utils/routesMap';
 import ProtectedRoute from './ProtectedRoute';
-import { TOKEN_KEY } from '../utils/token';
+import { getToken, removeToken, setToken } from '../utils/token';
 import * as auth from '../utils/auth';
 import NavBar from './NavBar';
 
@@ -453,25 +453,26 @@ class App extends React.Component {
     this.setState({ isLoading: true });
     auth
       .authorize(password, login)
-      .then((ok) => {
-        console.log({ ok });
-        if (!ok) {
+      .then((res) => {
+        if (!res.token) {
           this.setState({
             loggedIn: false,
             isInfoToolTipOpen: true,
           });
-        } else {
-          this.setState(
-            {
-              loggedIn: true,
-              isInfoToolTipOpen: true,
-            },
-            () => {
-              this.getContentWithCookie();
-              this.props.history.push(TO_.MAIN);
-            },
-          );
         }
+        setToken(res.token);
+      })
+      .then(() => {
+        this.setState(
+          {
+            loggedIn: true,
+            isInfoToolTipOpen: true,
+          },
+          () => {
+            this.getContentWithTokenCheck();
+            this.props.history.push(TO_.MAIN);
+          },
+        );
       })
       .catch((err) => console.log(err))
       .finally(() => this.setState({ isLoading: false }));
@@ -489,33 +490,37 @@ class App extends React.Component {
    * @since v.2.1.0
    * @see {@link App}
    */
-  getContentWithCookie = () => {
-    Promise.all([api.loadUserData(), api.loadCards()])
-      .then(([currentUserData, initialCardsData]) => {
-        this.setState({ currentUser: currentUserData });
-        const initialCards = initialCardsData.map((initialCard) => ({
-          id: initialCard._id,
-          link: initialCard.link,
-          title: initialCard.name,
-          likesQuantity: initialCard.likes.length,
-          owner: initialCard.owner,
-          likes: initialCard.likes,
-        }));
-        this.setState({ cards: initialCards });
-      })
-      .then(() => {
-        this.setState(
-          {
-            loggedIn: true,
-          },
-          () => {
-            this.props.history.push(TO_.MAIN);
-          },
-        );
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  getContentWithTokenCheck = () => {
+    const token = getToken();
+    if (token) {
+      console.log('Token is already in LocalStoradge!');
+      console.log('Here comes a data...');
+      Promise.all([api.loadUserData(), api.loadCards()])
+        .then(([currentUserData, initialCardsData]) => {
+          this.setState({ currentUser: currentUserData });
+          const initialCards = initialCardsData.map((initialCard) => ({
+            id: initialCard._id,
+            link: initialCard.link,
+            title: initialCard.name,
+            likesQuantity: initialCard.likes.length,
+            owner: initialCard.owner,
+            likes: initialCard.likes,
+          }));
+          this.setState(
+            {
+              currentUser: currentUserData,
+              cards: initialCards,
+              loggedIn: true,
+            },
+            () => {
+              this.props.history.push(TO_.MAIN);
+            },
+          );
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 
   /**
@@ -531,8 +536,8 @@ class App extends React.Component {
    */
   handleSignoutButtonClick = () => {
     this.setState({ isMenuOpened: false, loggedIn: false });
-    localStorage.removeItem(TOKEN_KEY);
     this.props.history.push(TO_.SIGNIN);
+    removeToken();
   };
 
   /**
@@ -555,61 +560,9 @@ class App extends React.Component {
    * @ignore
    */
   componentDidMount() {
-    this.getContentWithCookie();
-    console.log('Hello, we are working with cookies!');
+    console.log('Hello, we are working with token! Have a nice day!');
+    this.getContentWithTokenCheck();
   }
-  /*
-          Promise.all([api.loadUserData(), api.loadCards()])
-            .then(([currentUserData, initialCardsData]) => {
-              this.setState({ currentUser: currentUserData });
-
-         const initialCards = initialCardsData.map((initialCard) => ({
-            id: initialCard._id,
-            link: initialCard.link,
-            title: initialCard.name,
-            likesQuantity: initialCard.likes.length,
-            owner: initialCard.owner,
-            likes: initialCard.likes,
-          }));
-          this.setState({ cards: initialCards });
-        })
-        .catch((err) => {
-          console.log(err);
-            });
-        */
-  /*
- Promise.all([api.loadUserData(), api.loadCards()])
-                .then(([currentUserData, initialCardsData]) => {
-                  this.setState({ currentUser: currentUserData });
-
-                  /**
-                   * @description массив объектов с деструктурированными данными карточек
-                   * @param {Object} initialCardsData - массив объектов с данными карточек, полученный
-                   * после успешного запроса на сервер
-                   * @constant {Object} initialCards - новый массив объектов с данными карточек
-                   * @property {String} initialCards.id - уникальный id карточки
-                   * @property {String} initialCards.link - ссылка на изображение карточки
-                   * @property {String} initialCards.title - название карточки
-                   * @property {Number} initialCards.likesQuantity - число, количество лайков у карточки
-                   * @property {Object} initialCards.owner - объект, данные о владельце карточки
-                   * @property {Array} initialCards.likes - массив, содержит id всех пользователей, лайкнувших карточку
-                   * @ignore
-                   */
-  /*    const initialCards = initialCardsData.map((initialCard) => ({
-                    id: initialCard._id,
-                    link: initialCard.link,
-                    title: initialCard.name,
-                    likesQuantity: initialCard.likes.length,
-                    owner: initialCard.owner,
-                    likes: initialCard.likes,
-                  }));
-                  this.setState({ cards: initialCards });
-                })
-                .catch((err) => {
-                  console.log(err);
-                });
-
-  */
 
   /**
    * @method render
