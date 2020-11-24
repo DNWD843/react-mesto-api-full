@@ -1,7 +1,8 @@
 import * as PATH_TO_ from './endpoints';
 
 //const BASE_URL = "https://auth.nomoreparties.co";
-const BASE_URL = 'http://localhost:3000';
+//const BASE_URL = 'http://localhost:3000';
+const BASE_URL = 'http://84.201.177.57:3000';
 
 /**
  * @module auth

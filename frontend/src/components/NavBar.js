@@ -83,7 +83,7 @@ function NavBar({
 }
 
 NavBar.propTypes = {
-  email: PropTypes.string.isRequired,
+  email: PropTypes.string,
   handleSignoutButtonClick: PropTypes.func.isRequired,
   signOutButtonText: PropTypes.string,
   handleMenuClick: PropTypes.func.isRequired,

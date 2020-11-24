@@ -48,11 +48,11 @@ app.use(function (req, res, next) {
 //app.options('*', cors());
 //app.use(cors());
 //**************************************************************************************** */
-app.use(express.static(path.join(__dirname, 'public')));
+//app.use(express.static(path.join(__dirname, 'public')));
 //******************************************************************************************** */
 
 //});
-//app.use(cors());
+app.use(cors());
 
 //==============================================================================
 /*const corsOptions = {

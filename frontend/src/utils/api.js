@@ -238,8 +238,10 @@ class Api {
 const api = new Api({
   URLs: {
     //baseURL: 'http://localhost:3000',
-    cardsURL: 'http://localhost:3000/cards',
-    userURL: 'http://localhost:3000/users/me',
+    //cardsURL: 'http://localhost:3000/cards',
+    //userURL: 'http://localhost:3000/users/me',
+    cardsURL: 'http://84.201.177.57:3000/cards',
+    userURL: 'http://84.201.177.57:3000/users/me',
     likesURL: 'http://localhost:3000/cards/likes/',
     avatarURL: 'http://localhost:3000/users/me/avatar',
   },
