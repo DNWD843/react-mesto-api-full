@@ -1,7 +1,10 @@
-node_modules
-build
-dist
 .vscode
+node_modules
+dist
+documentation
 docker
+docker-compose.yml
 !docker/.gitkeep
 .env
+build
+*.log

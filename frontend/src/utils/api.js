@@ -237,18 +237,12 @@ class Api {
  */
 const api = new Api({
   URLs: {
-    baseURL: 'http://localhost:3000',
+    //baseURL: 'http://localhost:3000',
     cardsURL: 'http://localhost:3000/cards',
     userURL: 'http://localhost:3000/users/me',
     likesURL: 'http://localhost:3000/cards/likes/',
     avatarURL: 'http://localhost:3000/users/me/avatar',
   },
-  //headers: {
-  //authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}`,
-  //'Content-Security-Policy': 'default-src self; img-src *; script-src self; style-src self',
-  //Origin: 'http://localhost:3000',
-  //Credentials: 'include',
-  //},
 });
 
 export default api;

@@ -454,15 +454,16 @@ class App extends React.Component {
     auth
       .authorize(password, login)
       .then((res) => {
-        if (!res.token) {
-          this.setState({
+        console.log({ res });
+
+        if (!res) {
+          return this.setState({
             loggedIn: false,
             isInfoToolTipOpen: true,
           });
         }
         setToken(res.token);
-      })
-      .then(() => {
+        console.log('Token is already in LocalStoradge!');
         this.setState(
           {
             loggedIn: true,
@@ -493,10 +494,9 @@ class App extends React.Component {
   getContentWithTokenCheck = () => {
     const token = getToken();
     if (token) {
-      console.log('Token is already in LocalStoradge!');
-      console.log('Here comes a data...');
       Promise.all([api.loadUserData(), api.loadCards()])
         .then(([currentUserData, initialCardsData]) => {
+          console.log('Here comes a data...');
           this.setState({ currentUser: currentUserData });
           const initialCards = initialCardsData.map((initialCard) => ({
             id: initialCard._id,
@@ -560,7 +560,7 @@ class App extends React.Component {
    * @ignore
    */
   componentDidMount() {
-    console.log('Hello, we are working with token! Have a nice day!');
+    console.log('Hello! We are working with LocalStorage!');
     this.getContentWithTokenCheck();
   }
 

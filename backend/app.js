@@ -8,6 +8,7 @@ const { errors } = require('celebrate');
 const rootRouter = require('./routes/root');
 const handleErrors = require('./middlewares/handleErrors');
 const cors = require('cors');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const { PORT = 3000 } = process.env;
 
@@ -65,7 +66,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 */
 //app.use(cors(corsOptions));
 //===============================================================================
+
+app.use(requestLogger);
 app.use(rootRouter);
+
+app.use(errorLogger);
 app.use(errors());
 app.use(handleErrors);
 

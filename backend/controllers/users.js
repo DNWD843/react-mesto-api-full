@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 const { SALT_ROUND, JWT_MAX_AGE } = require('../configs');
 const BadRequestError = require('../errors/bad-request-error');
 const NotFoundError = require('../errors/not-found-error');
+const UnauthorizedError = require('../errors/unauthorized-error');
 
 const { NODE_ENV = 'develop', JWT_SECRET } = process.env;
 
@@ -248,7 +249,7 @@ const login = (req, res, next) => {
       return res.status(200).send({ token });
     })
     .catch((err) => {
-      const error = new BadRequestError(err.message);
+      const error = new UnauthorizedError(err.message);
       next(error);
     });
 };
