@@ -454,8 +454,6 @@ class App extends React.Component {
     auth
       .authorize(password, login)
       .then((res) => {
-        console.log({ res });
-
         if (!res) {
           return this.setState({
             loggedIn: false,
