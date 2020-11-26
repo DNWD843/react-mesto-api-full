@@ -5,7 +5,6 @@ const { NODE_ENV = 'develop', JWT_SECRET } = process.env;
 
 const auth = (req, res, next) => {
   const secret = NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret';
-  //const token = req.cookies.token;
 
   const { authorization } = req.headers;
 
@@ -15,7 +14,7 @@ const auth = (req, res, next) => {
   }
   const token = authorization.replace('Bearer ', '');
   if (!token) {
-    const error = new UnauthorizedError('Необходима авторизация 2');
+    const error = new UnauthorizedError('Необходима авторизация');
     return next(error);
   }
 
@@ -23,7 +22,7 @@ const auth = (req, res, next) => {
   try {
     payload = jwt.verify(token, secret);
   } catch (err) {
-    const error = new UnauthorizedError('Необходима авторизация 3');
+    const error = new UnauthorizedError('Необходима авторизация');
     next(error);
   }
   req.user = payload;

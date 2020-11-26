@@ -6,12 +6,11 @@ node_modules
 
 .npm
 
-dist
-documentation
-docker
-!docker/.gitkeep
+backend/documentation
+frontend/documentation
 
-build
+
+frontend/build/*
 .env
 *.log
 npm-debug.log*

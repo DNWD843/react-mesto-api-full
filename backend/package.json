@@ -1,13 +1,14 @@
 {
   "name": "mesto-express",
-  "version": "3.0.0",
+  "version": "1.3.0",
   "description": "backend of project MESTO",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js",
     "dev": "nodemon app.js",
-    "jsdoc:build": "jsdoc ./app.js ./controllers ./routes ./models ./README.md -d ./documentation"
+    "jsdoc:build": "jsdoc ./app.js ./controllers ./models ./README.md -d ./documentation",
+    "jsdoc:npx": "npx jsdoc ./app.js ./controllers ./models ./README.md -d ./documentation"
   },
   "repository": {
     "type": "git",

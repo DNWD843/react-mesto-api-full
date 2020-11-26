@@ -99,7 +99,7 @@ const getUserById = (req, res, next) => {
  * @property {String} newUserDta.email - емэйл пользователя (логин)
  * @property {String} newUserData.password - пароль
  * @returns {JSON}
- * @since v.1.1.0
+ * @since v.1.3.0
  * @instance
  * @public
  */
@@ -236,7 +236,7 @@ const editUserAvatar = (req, res, next) => {
  * @param {Object} res - объект ответа
  * @property {String} res.token - токен
  * @returns {Object} token
- * @since v.3.0.0
+ * @since v.1.3.0
  */
 
 const login = (req, res, next) => {
@@ -262,7 +262,7 @@ const login = (req, res, next) => {
  * @property {String} req.user._id - id авторизованного пользователя
  * @param {Object} res - объект ответа
  * @returns {Object}
- * @since v.3.0.0
+ * @since v.1.3.0
  */
 const getAuthorizedUser = (req, res, next) => {
   User.findById(req.user._id)

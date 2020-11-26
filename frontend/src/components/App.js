@@ -486,7 +486,7 @@ class App extends React.Component {
    * @public
    * @memberof App
    * @instance
-   * @since v.2.1.0
+   * @since v.2.1.1
    * @see {@link App}
    */
   getContentWithTokenCheck = () => {
