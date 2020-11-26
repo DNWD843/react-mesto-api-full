@@ -1,13 +1,3 @@
-/**
- * @module
- * @description Роутер cards. Обрабатывает запросы:<br>
- *  - GET /cards - возвращает все карточки<br>
- *  - POST /cards - создаёт новую карточку<br>
- *  - DELETE /cards/:cardId - удаляет карточку по идентификатору<br>
- *  - PUT /cards/:cardId/likes — ставит лайк карточке<br>
- *  - DELETE /cards/:cardId/likes — удаляет лайк с карточки
- * @since v.1.0.0
- */
 const router = require('express').Router();
 const { celebrate, Joi } = require('celebrate');
 const {

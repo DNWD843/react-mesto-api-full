@@ -6,10 +6,8 @@ node_modules
 
 .npm
 
-dist
-documentation
-docker
-!docker/.gitkeep
+backend/documentation
+frontend/documentation
 
 build
 .env
