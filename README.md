@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 **ПРОЕКТ "REACT-MESTO-API-FULL"**  
+=======
+**ПРОЕКТ "REACT-MESTO-API-FULL"**
+>>>>>>> 542f8fb93d8d51be8641c4c181b6a3f144a5356d
 **frontend + backend**
 
 License: Yandex.Praktikum<br>
@@ -22,6 +26,11 @@ Author: Dmitry Neklyudov<br>
 - JSDoc3.
 
 **Посмотреть проект**<br>
+<<<<<<< HEAD
 Публичный IP сервера: 84.201.177.57  
 Домен: linuxoid.students.nomoreparties.xyz  
+=======
+Публичный IP сервера: 84.201.177.57
+Домен: linuxoid.students.nomoreparties.xyz
+>>>>>>> 542f8fb93d8d51be8641c4c181b6a3f144a5356d
 Посмотреть проект можно нажав на эту <a href="https://linuxoid.students.nomoreparties.xyz">**_ссылку_**</a><br>
