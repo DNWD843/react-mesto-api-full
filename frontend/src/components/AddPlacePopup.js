@@ -1,8 +1,8 @@
-import React from "react";
-import PopupWithForm from "./PopupWithForm";
-import { useFormWithValidation } from "../hooks/useFormWithValidation";
-import PropTypes from "prop-types";
-
+import React from 'react';
+import PopupWithForm from './PopupWithForm';
+import { useFormWithValidation } from '../hooks/useFormWithValidation';
+import PropTypes from 'prop-types';
+import classNames from 'classnames';
 /**
  * @module AddPlacePopup
  * @description Функциональный React-компонент<br>
@@ -28,22 +28,29 @@ import PropTypes from "prop-types";
  * @see {@link PopupWithForm}
  * @since v.2.0.2
  */
-function AddPlacePopup({
-  isOpen,
-  isLoading,
-  onClose,
-  onOverlayClick,
-  onSubmit,
-}) {
+function AddPlacePopup({ isOpen, isLoading, onClose, onOverlayClick, onSubmit }) {
   const {
     values,
     errors,
-    isValid,
+    isFormValid,
+    isInputChecked,
+    isInputValid,
     handleInputChange,
     resetForm,
   } = useFormWithValidation();
 
   const { title, link } = values;
+
+  const placeTitleInputName = 'title';
+  const imageLinkInputName = 'link';
+
+  const placeTitleInputClassName = classNames('form__input', 'form__input_type_place-title', {
+    form__input_type_error:
+      isInputChecked[placeTitleInputName] && !isInputValid[placeTitleInputName],
+  });
+  const imageLinkInputClassName = classNames('form__input', 'form__input_type_image-link', {
+    form__input_type_error: isInputChecked[imageLinkInputName] && !isInputValid[imageLinkInputName],
+  });
 
   /**
    * @method handleSubmit
@@ -59,7 +66,7 @@ function AddPlacePopup({
   };
 
   React.useEffect(() => {
-    resetForm({}, {}, false);
+    resetForm();
     // eslint-disable-next-line
   }, [isOpen]);
 
@@ -72,17 +79,17 @@ function AddPlacePopup({
       onOverlayClick={onOverlayClick}
       onSubmit={handleSubmit}
       isLoading={isLoading}
-      isDisabled={!isValid}
+      isDisabled={!isFormValid}
     >
       <ul className="form__inputs">
         <li className="form__field">
           <input
             id="place-title-input"
-            name="title"
+            name={placeTitleInputName}
             type="text"
             onChange={handleInputChange}
-            value={title || ""}
-            className="form__input form__input_type_place-title"
+            value={title || ''}
+            className={placeTitleInputClassName}
             placeholder="Название"
             required
             minLength="3"
@@ -93,11 +100,11 @@ function AddPlacePopup({
         <li className="form__field">
           <input
             id="image-link-input"
-            name="link"
+            name={imageLinkInputName}
             type="url"
             onChange={handleInputChange}
-            value={link || ""}
-            className="form__input form__input_type_image-link"
+            value={link || ''}
+            className={imageLinkInputClassName}
             placeholder="Ссылка на картинку"
             required
           />

@@ -1,7 +1,8 @@
-import React, { useEffect } from "react";
-import { useFormWithValidation } from "../hooks/useFormWithValidation";
-import StartPageWithForm from "./StartPageWithForm";
-import PropTypes from "prop-types";
+import React, { useEffect } from 'react';
+import { useFormWithValidation } from '../hooks/useFormWithValidation';
+import StartPageWithForm from './StartPageWithForm';
+import PropTypes from 'prop-types';
+import classNames from 'classnames';
 
 /**
  * @module Register
@@ -16,15 +17,21 @@ import PropTypes from "prop-types";
  * @since v.2.1.0
  */
 function Register({ isLoading, handleRegister }) {
-  const {
-    values,
-    errors,
-    isValid,
-    handleInputChange,
-    resetForm,
-  } = useFormWithValidation();
+  const { values, errors, isFormValid, handleInputChange, resetForm } = useFormWithValidation();
 
   const { regEmail, regPassword } = values;
+
+  const regEmailInputClassName = classNames(
+    'form__input',
+    'form__input_type_start',
+    'form__input_type_reg-email',
+  );
+
+  const regPasswordInputClassName = classNames(
+    'form__input',
+    'form__input_type_start',
+    'form__input_type_reg-password',
+  );
 
   /**
    * @method handleSubmit
@@ -44,7 +51,7 @@ function Register({ isLoading, handleRegister }) {
   };
 
   useEffect(() => {
-    resetForm({}, {}, false);
+    resetForm();
     //eslint-disable-next-line
   }, []);
 
@@ -53,7 +60,7 @@ function Register({ isLoading, handleRegister }) {
       name="register"
       title="Регистрация"
       onSubmit={handleSubmit}
-      isDisabled={!isValid}
+      isDisabled={!isFormValid}
       isLoading={isLoading}
       submitButtonText="Зарегистрироваться"
       preloaderText="Регистрация..."
@@ -67,13 +74,13 @@ function Register({ isLoading, handleRegister }) {
               type="email"
               onChange={handleInputChange}
               onFocus={handleInputChange}
-              value={regEmail || ""}
-              className="form__input form__input_type_start form__input_type_reg-email"
+              value={regEmail || ''}
+              className={regEmailInputClassName}
               placeholder="Email"
               required
             />
             <span className="form__input-error" id="user-email-input-error">
-              {errors.regEmail || ""}
+              {errors.regEmail || ''}
             </span>
           </li>
           <li className="form__field">
@@ -83,15 +90,15 @@ function Register({ isLoading, handleRegister }) {
               type="password"
               onChange={handleInputChange}
               onFocus={handleInputChange}
-              value={regPassword || ""}
-              className="form__input form__input_type_start form__input_type_reg-password"
+              value={regPassword || ''}
+              className={regPasswordInputClassName}
               placeholder="Пароль"
               required
               minLength="3"
               maxLength="35"
             />
             <span className="form__input-error" id="reg-password-input-error">
-              {errors.regPassword || ""}
+              {errors.regPassword || ''}
             </span>
           </li>
         </ul>

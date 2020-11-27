@@ -1,8 +1,9 @@
-import React from "react";
-import PopupWithForm from "./PopupWithForm";
-import { CurrentUserContext } from "../contexts/CurrentUserContext";
-import { useFormWithValidation } from "../hooks/useFormWithValidation";
-import PropTypes from "prop-types";
+import React from 'react';
+import PopupWithForm from './PopupWithForm';
+import { CurrentUserContext } from '../contexts/CurrentUserContext';
+import { useFormWithValidation } from '../hooks/useFormWithValidation';
+import PropTypes from 'prop-types';
+import classNames from 'classnames';
 
 /**
  * @module EditProfilePopup
@@ -27,17 +28,13 @@ import PropTypes from "prop-types";
  * @see {@link PopupWithForm}
  * @since v.2.0.2
  */
-function EditProfilePopup({
-  isOpen,
-  isLoading,
-  onClose,
-  onOverlayClick,
-  onUpdateUser,
-}) {
+function EditProfilePopup({ isOpen, isLoading, onClose, onOverlayClick, onUpdateUser }) {
   const {
     values,
     errors,
-    isValid,
+    isFormValid,
+    isInputChecked,
+    isInputValid,
     handleInputChange,
     resetForm,
   } = useFormWithValidation();
@@ -45,6 +42,17 @@ function EditProfilePopup({
   const currentUser = React.useContext(CurrentUserContext);
 
   const { name, description } = values;
+
+  const userNameInputName = 'name';
+  const userDescriptionInputName = 'description';
+
+  const userNameInputClassName = classNames('form__input', 'form__input_type_name', {
+    form__input_type_error: isInputChecked[userNameInputName] && !isInputValid[userNameInputName],
+  });
+  const userDescriptionInputClassName = classNames('form__input', 'form__input_type_description', {
+    form__input_type_error:
+      isInputChecked[userDescriptionInputName] && !isInputValid[userDescriptionInputName],
+  });
 
   /**
    * @method handleSubmit
@@ -69,7 +77,7 @@ function EditProfilePopup({
         description: currentUser.about,
       },
       {},
-      true
+      true,
     );
     // eslint-disable-next-line
   }, [isOpen]);
@@ -84,42 +92,42 @@ function EditProfilePopup({
       onOverlayClick={onOverlayClick}
       onSubmit={handleSubmit}
       isLoading={isLoading}
-      isDisabled={!isValid}
+      isDisabled={!isFormValid}
     >
       <>
         <ul className="form__inputs">
           <li className="form__field">
             <input
               id="user-name-input"
-              name="name"
+              name={userNameInputName}
               type="text"
               onChange={handleInputChange}
-              value={name || ""}
-              className="form__input form__input_type_name"
+              value={name || ''}
+              className={userNameInputClassName}
               placeholder="Имя"
               required
               minLength="1"
               maxLength="30"
             />
             <span className="form__input-error" id="edit-profile-input-error">
-              {errors.name || ""}
+              {errors.name || ''}
             </span>
           </li>
           <li className="form__field">
             <input
               id="user-job-input"
-              name="description"
+              name={userDescriptionInputName}
               type="text"
               onChange={handleInputChange}
-              value={description || ""}
-              className="form__input form__input_type_job"
+              value={description || ''}
+              className={userDescriptionInputClassName}
               placeholder="О себе"
               required
               minLength="3"
               maxLength="35"
             />
             <span className="form__input-error" id="edit-profile-input-error">
-              {errors.description || ""}
+              {errors.description || ''}
             </span>
           </li>
         </ul>

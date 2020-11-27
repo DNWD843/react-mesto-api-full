@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useFormWithValidation } from '../hooks/useFormWithValidation';
 import StartPageWithForm from './StartPageWithForm';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 
 /**
  * @module Login
@@ -23,9 +24,20 @@ import PropTypes from 'prop-types';
  * @since v.2.1.0
  */
 function Login({ isLoading, handleLogin }) {
-  const { values, errors, isValid, handleInputChange, resetForm } = useFormWithValidation();
+  const { values, errors, isFormValid, handleInputChange, resetForm } = useFormWithValidation();
 
   const { login, password } = values;
+
+  const loginInputClassName = classNames(
+    'form__input',
+    'form__input_type_start',
+    'form__input_type_login',
+  );
+  const passwordInputClassName = classNames(
+    'form__input',
+    'form__input_type_start',
+    'form__input_type_password',
+  );
 
   /**
    * @method handleSubmit
@@ -56,7 +68,7 @@ function Login({ isLoading, handleLogin }) {
       name="login"
       title="Вход"
       onSubmit={handleSubmit}
-      isDisabled={!isValid}
+      isDisabled={!isFormValid}
       isLoading={isLoading}
       submitButtonText="Войти"
       preloaderText="Выполняется вход..."
@@ -71,7 +83,7 @@ function Login({ isLoading, handleLogin }) {
               onChange={handleInputChange}
               onFocus={handleInputChange}
               value={login || ''}
-              className="form__input form__input_type_start form__input_type_user-login"
+              className={loginInputClassName}
               placeholder="Email"
               required
             />
@@ -87,7 +99,7 @@ function Login({ isLoading, handleLogin }) {
               onChange={handleInputChange}
               onFocus={handleInputChange}
               value={password || ''}
-              className="form__input form__input_type_start form__input_type_user-password"
+              className={passwordInputClassName}
               placeholder="Пароль"
               required
               minLength="3"

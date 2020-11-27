@@ -1,7 +1,8 @@
-import React from "react";
-import PopupWithForm from "./PopupWithForm";
-import { useFormWithValidation } from "../hooks/useFormWithValidation";
-import PropTypes from "prop-types";
+import React from 'react';
+import PopupWithForm from './PopupWithForm';
+import { useFormWithValidation } from '../hooks/useFormWithValidation';
+import PropTypes from 'prop-types';
+import classNames from 'classnames';
 
 /**
  * @module EditAvatarPopup
@@ -25,22 +26,23 @@ import PropTypes from "prop-types";
  * @see {@link PopupWithForm}
  * @since v.2.0.2
  */
-function EditAvatarPopup({
-  isOpen,
-  isLoading,
-  onClose,
-  onOverlayClick,
-  onUpdateAvatar,
-}) {
+function EditAvatarPopup({ isOpen, isLoading, onClose, onOverlayClick, onUpdateAvatar }) {
   const {
     values,
     errors,
-    isValid,
+    isFormValid,
+    isInputChecked,
+    isInputValid,
     handleInputChange,
     resetForm,
   } = useFormWithValidation();
 
   const { avatar } = values;
+
+  const formInputName = 'avatar';
+  const formInputClassName = classNames('form__input', 'form__input_type_avatar-link', {
+    form__input_type_error: isInputChecked[formInputName] && !isInputValid[formInputName],
+  });
 
   /**
    * @method handleSubmit
@@ -56,7 +58,7 @@ function EditAvatarPopup({
   };
 
   React.useEffect(() => {
-    resetForm({}, {}, false);
+    resetForm();
     // eslint-disable-next-line
   }, [isOpen]);
 
@@ -69,18 +71,18 @@ function EditAvatarPopup({
       onOverlayClick={onOverlayClick}
       onSubmit={handleSubmit}
       isLoading={isLoading}
-      isDisabled={!isValid}
+      isDisabled={!isFormValid}
       children={
         <ul className="form__inputs">
           <li className="form__field">
             <input
               id="avatar-link-input"
-              name="avatar"
+              name={formInputName}
               type="url"
               onChange={handleInputChange}
-              value={avatar || ""}
-              className="form__input form__input_type_avatar-link"
-              placeholder="Ссылка на картинку"
+              value={avatar || ''}
+              className={formInputClassName}
+              placeholder="Cсылка на картинку"
               required
             />
             <span className="form__input-error" id="avatar-link-input-error">

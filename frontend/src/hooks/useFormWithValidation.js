@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useState } from 'react';
 
 /**
  * @module useFormWithValidation
@@ -14,7 +14,9 @@ import { useCallback, useState } from "react";
 export function useFormWithValidation() {
   const [values, setValues] = useState({});
   const [errors, setErrors] = useState({});
-  const [isValid, setIsValid] = useState(false);
+  const [isFormValid, setIsFormValid] = useState(false);
+  const [isInputChecked, setIsInputChecked] = useState({});
+  const [isInputValid, setIsInputValid] = useState({});
 
   /**
    * @method
@@ -29,7 +31,9 @@ export function useFormWithValidation() {
     const { name, value } = event.target;
     setValues({ ...values, [name]: value });
     setErrors({ ...errors, [name]: event.target.validationMessage });
-    setIsValid(event.target.closest("form").checkValidity());
+    setIsFormValid(event.target.closest('form').checkValidity());
+    setIsInputChecked({ ...isInputChecked, [name]: true });
+    setIsInputValid({ ...isInputValid, [name]: event.target.checkValidity() });
   };
 
   /**
@@ -42,21 +46,30 @@ export function useFormWithValidation() {
    * @since v.2.0.6
    */
   const resetForm = useCallback(
-    /**
-     * @function resetForm_callback
-     * @param {Object} newValues - новое значение стейта values
-     * @param {Object} newErrors - новое значение стейта errors
-     * @param {Boolean} newIsValid - новое значение стейта isValid
-     * @description Коллбэк метода resetForm.<br> Устанавливает стейты в состояния согласно принятым аргументам.
-     * @since v.2.0.6
-     */
-    (newValues = {}, newErrors = {}, newIsValid = false) => {
+    (
+      newValues = {},
+      newErrors = {},
+      newIsFormValid = false,
+      newIsInputChecked = {},
+      newIsInputValid = {},
+    ) => {
       setValues(newValues);
       setErrors(newErrors);
-      setIsValid(newIsValid);
+      setIsFormValid(newIsFormValid);
+      setIsInputChecked(newIsInputChecked);
+      setIsInputValid(newIsInputValid);
     },
-    [setValues, setErrors, setIsValid]
+    [setValues, setErrors, setIsFormValid, setIsInputChecked, setIsInputValid],
   );
 
-  return { values, errors, isValid, handleInputChange, setValues, resetForm };
+  return {
+    values,
+    errors,
+    isFormValid,
+    isInputChecked,
+    isInputValid,
+    handleInputChange,
+    setValues,
+    resetForm,
+  };
 }
