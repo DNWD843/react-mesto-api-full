@@ -1,10 +1,11 @@
-const User = require('../models/user');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const User = require('../models/user');
 const { SALT_ROUND, JWT_MAX_AGE } = require('../configs');
 const BadRequestError = require('../errors/bad-request-error');
 const NotFoundError = require('../errors/not-found-error');
 const UnauthorizedError = require('../errors/unauthorized-error');
+const ConflictError = require('../errors/conflict-error');
 
 const { NODE_ENV = 'develop', JWT_SECRET } = process.env;
 
@@ -73,9 +74,9 @@ const getUserById = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'CastError') {
         const error = new BadRequestError('Переданы некорректные данные');
-        next(error);
+        return next(error);
       }
-      next(err);
+      return next(err);
     });
 };
 
@@ -104,18 +105,25 @@ const getUserById = (req, res, next) => {
  * @public
  */
 const createUser = (req, res, next) => {
-  const { name, about, avatar, email, password } = req.body;
-  bcrypt.hash(password, SALT_ROUND).then((hash) =>
-    User.create({ name, about, avatar, email, password: hash })
+  const {
+    name, about, avatar, email, password,
+  } = req.body;
+  bcrypt.hash(password, SALT_ROUND)
+    .then((hash) => User.create({
+      name, about, avatar, email, password: hash,
+    })
       .then((user) => res.status(200).send({ _id: user._id, email: user.email }))
       .catch((err) => {
         if (err.name === 'ValidationError') {
           const error = new BadRequestError('Переданы некорректные данные');
-          next(error);
+          return next(error);
         }
-        next(err);
-      }),
-  );
+        if (err.name === 'MongoError') {
+          const error = new ConflictError('Пользователь с такими данными уже зарегистрирован');
+          return next(error);
+        }
+        return next(err);
+      }));
 };
 
 /**
@@ -154,7 +162,6 @@ const editUserProfile = (req, res, next) => {
     {
       new: true,
       runValidators: true,
-      upsert: true,
     },
   )
     .then((user) => {
@@ -166,9 +173,9 @@ const editUserProfile = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         const error = new BadRequestError('Переданы некорректные данные');
-        next(error);
+        return next(error);
       }
-      next(err);
+      return next(err);
     });
 };
 
@@ -207,7 +214,6 @@ const editUserAvatar = (req, res, next) => {
     {
       new: true,
       runValidators: true,
-      upsert: true,
     },
   )
     .then((user) => {
@@ -219,9 +225,9 @@ const editUserAvatar = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         const error = new BadRequestError('Переданы некорректные данные');
-        next(error);
+        return next(error);
       }
-      next(err);
+      return next(err);
     });
 };
 
@@ -244,13 +250,14 @@ const login = (req, res, next) => {
   return User.findUserByCredentials(email, password)
     .then((user) => {
       const secret = NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret';
-      const token = jwt.sign({ _id: user._id }, secret, { expiresIn: JWT_MAX_AGE });
-
+      const token = jwt.sign({ _id: user._id }, secret, {
+        expiresIn: JWT_MAX_AGE,
+      });
       return res.status(200).send({ token });
     })
     .catch((err) => {
       const error = new UnauthorizedError(err.message);
-      next(error);
+      return next(error);
     });
 };
 
@@ -275,9 +282,9 @@ const getAuthorizedUser = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'CastError') {
         const error = new BadRequestError('Переданы некорректные данные');
-        next(error);
+        return next(error);
       }
-      next(err);
+      return next(err);
     });
 };
 

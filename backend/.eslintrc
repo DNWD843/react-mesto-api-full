@@ -1,8 +1,6 @@
 {
-  "extends": ["airbnb-base", "prettier", "plugin:prettier/recommended"],
+  "extends": ["airbnb-base"],
   "rules": {
-    "no-console": "off",
-    "semi": ["error", "always"],
     "no-underscore-dangle": [
       "error",
       {

@@ -65,9 +65,9 @@ const createCard = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         const error = new BadRequestError('Переданы некорректные данные');
-        next(error);
+        return next(error);
       }
-      next(err);
+      return next(err);
     });
 };
 
@@ -97,7 +97,15 @@ const deleteCard = (req, res, next) => {
       card.remove();
       return res.status(200).send({ message: 'Карточка успешно удалена' });
     })
-    .catch(next);
+    .catch((err) => {
+      // eslint-disable-next-line
+      console.log(err);
+      if (err.name === 'CastError') {
+        const error = new BadRequestError('Невалидный id');
+        return next(error);
+      }
+      return next(err);
+    });
 };
 
 /**

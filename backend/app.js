@@ -2,10 +2,10 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 const { errors } = require('celebrate');
 const rootRouter = require('./routes/root');
 const handleErrors = require('./middlewares/handleErrors');
-const cors = require('cors');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const { PORT = 3000 } = process.env;
@@ -43,9 +43,11 @@ mongoose
   })
   .then(() => {
     app.listen(PORT, () => {
+      // eslint-disable-next-line
       console.log(`App listening on port ${PORT}`);
     });
   })
   .catch((err) => {
+    // eslint-disable-next-line
     console.error(`Can't start app ${err.toString()}`);
   });

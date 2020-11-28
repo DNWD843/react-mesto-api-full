@@ -6,7 +6,7 @@ const createUserReqValidator = celebrate({
       name: Joi.string().min(2).max(30),
       about: Joi.string().min(2).max(30),
       avatar: Joi.string().pattern(
-        /[-a-zA-Z0-9@:%_\+.~#?&\/=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&\/=]*)?/i,
+        /[-a-zA-Z0-9@:%_.~#?&/=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_.~#?&/=]*)?/i,
       ),
       email: Joi.string().email().required(),
       password: Joi.string().alphanum().required().min(8),
@@ -18,7 +18,9 @@ const editProfileReqValidator = celebrate({
   headers: Joi.object()
     .keys({
       authorization: Joi.string()
-        .pattern(/^Bearer.[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$/)
+        .pattern(
+          /^Bearer.[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$/,
+        )
         .required(),
     })
     .unknown(true),
@@ -34,14 +36,18 @@ const editAvatarReqValidator = celebrate({
   headers: Joi.object()
     .keys({
       authorization: Joi.string()
-        .pattern(/^Bearer.[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$/)
+        .pattern(
+          /^Bearer.[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$/,
+        )
         .required(),
     })
     .unknown(true),
   body: Joi.object()
     .keys({
       avatar: Joi.string()
-        .pattern(/[-a-zA-Z0-9@:%_\+.~#?&\/=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&\/=]*)?/i)
+        .pattern(
+          /[-a-zA-Z0-9@:%_.~#?&/=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_.~#?&/=]*)?/i,
+        )
         .required(),
     })
     .unknown(true),
@@ -60,7 +66,9 @@ const getUserDataReqValidator = celebrate({
   headers: Joi.object()
     .keys({
       authorization: Joi.string()
-        .pattern(/^Bearer.[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$/)
+        .pattern(
+          /^Bearer.[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$/,
+        )
         .required(),
     })
     .unknown(true),

@@ -23,11 +23,9 @@
   "devDependencies": {
     "eslint": "^7.12.1",
     "eslint-config-airbnb-base": "^14.2.0",
-    "eslint-config-prettier": "^6.15.0",
     "eslint-plugin-import": "^2.22.1",
     "jsdoc": "^3.6.6",
-    "nodemon": "^2.0.4",
-    "prettier": "^2.1.2"
+    "nodemon": "^2.0.4"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

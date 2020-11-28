@@ -32,8 +32,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     validate: {
       validator(v) {
-        // eslint-disable-next-line
-        const regex = /^https?:\/\/(www\.)?[\w\-\.]+\.[a-z]{2,3}\b[\w\/\-\?=\&\$\%]*(\.[a-z]{3})?#?$/;
+        const regex = /^https?:\/\/(www\.)?[\w\-.]+\.[a-z]{2,3}\b[\w/\-?=&$%]*(\.[a-z]{3})?#?$/;
         return regex.test(v);
       },
     },
