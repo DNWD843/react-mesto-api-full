@@ -186,7 +186,7 @@ class Api {
    * @since v2.0.2
    */
   changeLikeCardStatus(id, likeStatus) {
-    return fetch(`${this._likesURL}${id}`, {
+    return fetch(`${this._cardsURL}/${id}/likes`, {
       method: `${likeStatus ? 'PUT' : 'DELETE'}`,
       headers: {
         authorization: `Bearer ${getToken()}`,
@@ -239,7 +239,6 @@ const api = new Api({
   URLs: {
     cardsURL: 'https://api.linuxoid.students.nomoreparties.xyz/cards',
     userURL: 'https://api.linuxoid.students.nomoreparties.xyz/users/me',
-    likesURL: 'https://api.linuxoid.students.nomoreparties.xyz/cards/likes/',
     avatarURL: 'https://api.linuxoid.students.nomoreparties.xyz/users/me/avatar',
   },
 });

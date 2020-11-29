@@ -146,7 +146,13 @@ const likeCard = (req, res, next) => {
       }
       return res.status(200).send(card);
     })
-    .catch(next);
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        const error = new BadRequestError('Невалидный id');
+        return next(error);
+      }
+      return next(err);
+    });
 };
 
 /**
@@ -186,7 +192,13 @@ const dislikeCard = (req, res, next) => {
       }
       return res.status(200).send(card);
     })
-    .catch(next);
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        const error = new BadRequestError('Невалидный id');
+        return next(error);
+      }
+      return next(err);
+    });
 };
 
 module.exports = {
