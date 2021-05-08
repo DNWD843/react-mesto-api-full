@@ -22,6 +22,4 @@ Author: Dmitry Neklyudov<br>
 - JSDoc3.
 
 **Посмотреть проект**<br>
-Публичный IP сервера: 84.201.177.57  
-Домен: linuxoid.students.nomoreparties.xyz  
-Посмотреть проект можно нажав на эту <a href="https://linuxoid.students.nomoreparties.xyz">**_ссылку_**</a><br>
+Посмотреть проект можно нажав на эту <a href="https://instamesto.nomoredomains.icu">**_ссылку_**</a><br>
