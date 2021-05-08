@@ -1,0 +1,11 @@
+.DS_Store
+.idea
+.vscode
+node_modules
+.npm
+documentation
+build
+.env
+*.log
+npm-debug.log*
+.lock
