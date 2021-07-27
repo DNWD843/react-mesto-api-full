@@ -20,6 +20,3 @@ Author: Dmitry Neklyudov<br>
 - Express.js;
 - MongoDB, mongoose, Compass;
 - JSDoc3.
-
-**Посмотреть проект**<br>
-Посмотреть проект можно нажав на эту <a href="https://instamesto.nomoredomains.icu">**_ссылку_**</a><br>
